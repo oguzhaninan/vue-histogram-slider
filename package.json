@@ -18,11 +18,13 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --name histogram-slider --entry ./src/histogram-slider.js --target lib",
+    "build": "vue-cli-service build --name histogram-slider --entry ./src/HistogramSlider.vue --target lib",
     "prepublishOnly": "yarn lint && yarn build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "d3": "4.2.0",
+    "jquery": "^3.4.1",
     "vue": "^2.6.10"
   },
   "devDependencies": {

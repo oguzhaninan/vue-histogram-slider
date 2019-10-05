@@ -1,5 +1,7 @@
 import Vue from "vue";
-import App from "./App.vue";
+window.$ = require("jquery");
+window.JQuery = require("jquery");
+import App from "./HistogramSlider.vue";
 
 Vue.config.productionTip = false;
 
