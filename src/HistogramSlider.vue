@@ -117,6 +117,10 @@ export default {
     gridTextColor: {
       type: String,
       default: "silver"
+    },
+    lineHeight: {
+      type: Number,
+      default: 6
     }
   },
 
@@ -128,6 +132,7 @@ export default {
         --holder-color: ${this.holderColor};
         --handle-color: ${this.handleColor};
         --grid-text-color: ${this.gridTextColor};
+        --line-height: ${this.lineHeight}px;
       `;
     }
   },
@@ -197,22 +202,24 @@ export default {
       block: this.block,
       keyboard: this.keyboard,
       prettify: this.prettify,
-      // onStart(val) {
-      //   // this.$emit('start', val)
-      // },
-      // onUpdate(val) {
-      //   // this.$emit('update', val)
-      // },
-      // onFinish(val) {
-      //   // this.$emit('finish', val)
-      // },
-      onChange(val) {
+      onStart: val => {
+        this.$emit("start", val);
+      },
+      onUpdate: val => {
+        this.$emit("update", val);
+      },
+      onFinish: val => {
+        this.$emit("finish", val);
+      },
+      onChange: val => {
         d3Select
           .selectAll(".bar")
           .attr("fill", d =>
-            d.x0 < val.to && d.x0 > val.from ? "#0091ff" : "#d8d8d8"
+            d.x0 < val.to && d.x0 > val.from
+              ? this.primaryColor
+              : this.holderColor
           );
-        // this.$emit('change', val)
+        this.$emit("change", val);
       }
     });
   }
@@ -249,9 +256,11 @@ export default {
   display: block;
   overflow: hidden;
   outline: none !important;
+  cursor: pointer;
 }
 
 .irs-bar {
+  cursor: pointer;
   position: absolute;
   display: block;
   left: 0;
@@ -326,7 +335,7 @@ export default {
 }
 
 .irs-grid-pol.small {
-  height: 4px;
+  height: var(--line-height);
 }
 
 .irs-grid-text {
@@ -392,14 +401,14 @@ export default {
 
 .irs--round .irs-line {
   top: 36px;
-  height: 4px;
+  height: var(--line-height);
   background-color: var(--holder-color);
-  border-radius: 4px;
+  border-radius: var(--line-height);
 }
 
 .irs--round .irs-bar {
   top: 36px;
-  height: 4px;
+  height: var(--line-height);
   background-color: var(--primary-color);
 }
 
@@ -408,7 +417,7 @@ export default {
 }
 
 .irs--round .irs-shadow {
-  height: 4px;
+  height: var(--line-height);
   bottom: 21px;
   background-color: rgba(222, 228, 236, 0.5);
 }

@@ -1,11 +1,11 @@
 <template>
   <div>
-    grafik
     <HistogramSlider
       :width="900"
       :barHeight="110"
       :data="data"
       :prettify="prettify"
+      :dragInterval="true"
       :min="new Date(2004, 11, 24).valueOf()"
       :max="new Date(2017, 11, 24).valueOf()"
     />
@@ -26,6 +26,12 @@ export default {
         });
       }
     };
+  },
+
+  methods: {
+    onChange(val) {
+      console.log(val);
+    }
   },
 
   components: {
