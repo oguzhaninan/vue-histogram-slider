@@ -1,120 +1,206 @@
 <template>
-  <div
-    style="width: 600px; margin: 200px auto; display: flex; align-items: center; flex-direction: column;"
-  >
+  <div :style="`width: ${width}px;`" id="hist-slider-wrapper">
     <svg id="histogram-view"></svg>
     <div style="margin-top: -30px; width: 100%;">
-      <input type="text" id="slider" />
+      <input type="text" id="histogram-slider" />
     </div>
   </div>
 </template>
 
 <script>
 import "./lib/range-slider";
-import * as d3 from "d3";
+import * as d3Scale from "d3-scale";
+import * as d3Array from "d3-array";
+import * as d3Select from "d3-selection";
 import * as $ from "jquery";
+var data = require("../data.json");
 
 export default {
   name: "HistogramSlider",
 
+  props: {
+    min: {
+      type: Number
+      // required: true
+    },
+    max: {
+      type: Number
+      // required: true
+    },
+    data: {
+      type: Array
+      // required: true
+    },
+    block: {
+      type: Boolean,
+      default: false
+    },
+    grid: {
+      type: Boolean,
+      default: true
+    },
+    gridNum: {
+      type: Number,
+      default: 4
+    },
+    step: {
+      type: Number,
+      default: 1
+    },
+    hideMinMax: {
+      type: Boolean,
+      default: true
+    },
+    hideFromTo: {
+      type: Boolean,
+      default: false
+    },
+    toFixed: {
+      type: Boolean,
+      default: false
+    },
+    fromFixed: {
+      type: Boolean,
+      default: false
+    },
+    forceEdges: {
+      type: Boolean,
+      default: true
+    },
+    dragInterval: {
+      type: Boolean,
+      default: false
+    },
+    keyboard: {
+      type: Boolean,
+      default: true
+    },
+    type: {
+      type: String,
+      default: "double",
+      validator: function(value) {
+        return ["double", "single"].indexOf(value) !== -1;
+      }
+    },
+    width: {
+      type: Number,
+      default: 650
+    },
+    barHeight: {
+      type: Number,
+      default: 100
+    },
+    barWidth: {
+      type: Number,
+      default: 6
+    },
+    barGap: {
+      type: Number,
+      default: 5
+    },
+    barRadius: {
+      type: Number,
+      default: 4
+    },
+    prettify: Function
+  },
+
   mounted() {
     const config = {
-      width: 580,
-      barHeight: 100,
-      barWidth: 6,
-      barGap: 5,
-      barRadius: 4,
-      lang: "tr",
+      width: this.width - 20,
+      barHeight: this.barHeight,
+      barWidth: this.barWidth,
+      barGap: this.barGap,
+      barRadius: this.barRadius,
       min: new Date(2004, 11, 24).valueOf(),
       max: new Date(2017, 11, 24).valueOf(),
       prettify: function(ts) {
-        return new Date(ts).toLocaleDateString(config.lang, {
+        return new Date(ts).toLocaleDateString("en", {
           year: "numeric",
-          month: "long",
+          month: "short",
           day: "numeric"
         });
       }
     };
 
     // x scale for time
-    var x = d3
+    var x = d3Scale
       .scaleTime()
       .domain([config.min, config.max])
       .range([0, config.width])
       .clamp(true);
 
     // y scale for histogram
-    var y = d3.scaleLinear().range([config.barHeight, 0]);
+    var y = d3Scale.scaleLinear().range([config.barHeight, 0]);
 
-    ////////// histogram set up //////////
-    var histogram = d3
-      .histogram()
-      .value(d => d.date)
+    var histogram = d3Array
+      .bin()
+      .value(d => new Date(d.date))
       .domain(x.domain())
       .thresholds(config.width / (config.barWidth + config.barGap));
 
-    var svg = d3
+    var svg = d3Select
       .select("#histogram-view")
       .attr("width", config.width)
       .attr("height", config.barHeight);
 
     var hist = svg.append("g").attr("class", "histogram");
 
-    d3.csv(
-      "https://gist.githubusercontent.com/oguzhaninan/ae7466169c06d9c145e028ff398b6eb3/raw/be32fbc76953c349c9c695e98a69f1a46d775375/example.csv",
-      prepare,
-      function(data) {
-        // group data for bars
-        var bins = histogram(data);
+    // group data for bars
+    var bins = histogram(data);
 
-        // y domain based on binned data
-        y.domain([0, d3.max(bins, d => d.length)]);
+    y.domain([0, d3Array.max(bins, d => d.length)]);
 
-        var bar = hist
-          .selectAll(".bar")
-          .data(bins)
-          .enter()
-          .append("g")
-          .attr("class", "bar")
-          .attr("transform", d => `translate(${x(d.x0)}, ${y(d.length)})`);
+    var bar = hist
+      .selectAll(".bar")
+      .data(bins)
+      .enter()
+      .append("g")
+      .attr("class", "bar")
+      .attr("transform", d => `translate(${x(d.x0)}, ${y(d.length)})`);
 
-        bar
-          .append("rect")
-          .attr("class", "bar")
-          .attr("x", 1)
-          .attr("rx", config.barRadius)
-          .attr("width", config.barWidth)
-          .attr("height", d => config.barHeight - y(d.length))
-          .attr("fill", "#0091ff");
-      }
-    );
+    bar
+      .append("rect")
+      .attr("class", "bar")
+      .attr("x", 1)
+      .attr("rx", config.barRadius)
+      .attr("width", config.barWidth)
+      .attr("height", d => config.barHeight - y(d.length))
+      .attr("fill", "#0091ff");
 
-    var parseDate = d3.timeParse("%d-%b-%y");
-    function prepare(d) {
-      d.date = parseDate(d.date);
-      d.value = +d.value;
-      return d;
-    }
-
-    $("#slider").ionRangeSlider({
+    $("#histogram-slider").ionRangeSlider({
       skin: "round",
-      type: "double",
-      grid: true,
-      step: 1,
       min: config.min,
       max: config.max,
-      hide_min_max: true,
-      hide_from_to: false,
-      force_edges: true,
-      drag_interval: true,
+      type: this.type,
+      grid: this.grid,
+      step: this.step,
+      from_fixed: this.fromFixed,
+      to_fixed: this.toFixed,
+      hide_min_max: this.hideMinMax,
+      hide_from_to: this.hideFromTo,
+      force_edges: this.forceEdges,
+      drag_interval: this.dragInterval,
+      grid_num: this.Number,
+      block: this.block,
+      keyboard: this.keyboard,
       prettify: config.prettify,
-      onChange: function(val) {
-        d3.selectAll(".bar").attr("fill", d =>
-          d.x0 < val.to && d.x0 > val.from ? "#0091ff" : "#d8d8d8"
-        );
-        if (config.onChange) {
-          config.onChange(val);
-        }
+      // onStart(val) {
+      //   // this.$emit('start', val)
+      // },
+      // onUpdate(val) {
+      //   // this.$emit('update', val)
+      // },
+      // onFinish(val) {
+      //   // this.$emit('finish', val)
+      // },
+      onChange(val) {
+        d3Select
+          .selectAll(".bar")
+          .attr("fill", d =>
+            d.x0 < val.to && d.x0 > val.from ? "#0091ff" : "#d8d8d8"
+          );
+        // this.$emit('change', val)
       }
     });
   }
@@ -122,6 +208,12 @@ export default {
 </script>
 
 <style>
+#hist-slider-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .irs {
   position: relative;
   display: block;
