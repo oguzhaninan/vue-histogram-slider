@@ -1,10 +1,25 @@
 {
   "name": "vue-histogram-slider",
-  "description": "Histogram range slider component for vue.js",
+  "description": "Range slider with histogram for vue.js",
   "version": "0.1.0",
+  "main": "dist/histogram-slider.umd.min.js",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oguzhaninan/vue-histogram-slider.git"
+  },
+  "keywords": [
+    "vue",
+    "vuejs",
+    "slider",
+    "range-slider",
+    "histogram",
+    "histogram-slider"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --name histogram-slider --entry ./src/histogram-slider.js --target lib",
+    "prepublishOnly": "yarn lint && yarn build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
