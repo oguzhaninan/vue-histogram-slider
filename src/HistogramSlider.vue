@@ -1,7 +1,7 @@
 <template>
-  <div :style="`width: ${width}px;`" id="hist-slider-wrapper">
+  <div :style="style" id="vue-histogram-slider-wrapper">
     <svg id="histogram-view"></svg>
-    <div style="margin-top: -30px; width: 100%;">
+    <div id="slider-wrapper">
       <input type="text" id="histogram-slider" />
     </div>
   </div>
@@ -13,23 +13,22 @@ import * as d3Scale from "d3-scale";
 import * as d3Array from "d3-array";
 import * as d3Select from "d3-selection";
 import * as $ from "jquery";
-var data = require("../data.json");
 
 export default {
   name: "HistogramSlider",
 
   props: {
     min: {
-      type: Number
-      // required: true
+      type: Number,
+      required: true
     },
     max: {
-      type: Number
-      // required: true
+      type: Number,
+      required: true
     },
     data: {
-      type: Array
-      // required: true
+      type: Array,
+      required: true
     },
     block: {
       type: Boolean,
@@ -102,52 +101,65 @@ export default {
       type: Number,
       default: 4
     },
-    prettify: Function
+    prettify: Function,
+    primaryColor: {
+      type: String,
+      default: "#0091ff"
+    },
+    holderColor: {
+      type: String,
+      default: "#dee4ec"
+    },
+    handleColor: {
+      type: String,
+      default: "#ffffff"
+    },
+    gridTextColor: {
+      type: String,
+      default: "silver"
+    }
+  },
+
+  computed: {
+    style() {
+      return `
+        width: ${this.width}px; 
+        --primary-color: ${this.primaryColor};
+        --holder-color: ${this.holderColor};
+        --handle-color: ${this.handleColor};
+        --grid-text-color: ${this.gridTextColor};
+      `;
+    }
   },
 
   mounted() {
-    const config = {
-      width: this.width - 20,
-      barHeight: this.barHeight,
-      barWidth: this.barWidth,
-      barGap: this.barGap,
-      barRadius: this.barRadius,
-      min: new Date(2004, 11, 24).valueOf(),
-      max: new Date(2017, 11, 24).valueOf(),
-      prettify: function(ts) {
-        return new Date(ts).toLocaleDateString("en", {
-          year: "numeric",
-          month: "short",
-          day: "numeric"
-        });
-      }
-    };
+    const width = this.width - 20;
 
     // x scale for time
     var x = d3Scale
       .scaleTime()
-      .domain([config.min, config.max])
-      .range([0, config.width])
+      .domain([this.min, this.max])
+      .range([0, width])
       .clamp(true);
 
     // y scale for histogram
-    var y = d3Scale.scaleLinear().range([config.barHeight, 0]);
+    var y = d3Scale.scaleLinear().range([this.barHeight, 0]);
 
     var histogram = d3Array
       .bin()
       .value(d => new Date(d.date))
       .domain(x.domain())
-      .thresholds(config.width / (config.barWidth + config.barGap));
+      .thresholds(width / (this.barWidth + this.barGap));
 
     var svg = d3Select
       .select("#histogram-view")
-      .attr("width", config.width)
-      .attr("height", config.barHeight);
+      .attr("width", width)
+      .attr("height", this.barHeight);
 
     var hist = svg.append("g").attr("class", "histogram");
 
     // group data for bars
-    var bins = histogram(data);
+    var bins = histogram(this.data);
 
     y.domain([0, d3Array.max(bins, d => d.length)]);
 
@@ -163,15 +175,15 @@ export default {
       .append("rect")
       .attr("class", "bar")
       .attr("x", 1)
-      .attr("rx", config.barRadius)
-      .attr("width", config.barWidth)
-      .attr("height", d => config.barHeight - y(d.length))
+      .attr("rx", this.barRadius)
+      .attr("width", this.barWidth)
+      .attr("height", d => this.barHeight - y(d.length))
       .attr("fill", "#0091ff");
 
     $("#histogram-slider").ionRangeSlider({
       skin: "round",
-      min: config.min,
-      max: config.max,
+      min: this.min,
+      max: this.max,
       type: this.type,
       grid: this.grid,
       step: this.step,
@@ -184,7 +196,7 @@ export default {
       grid_num: this.Number,
       block: this.block,
       keyboard: this.keyboard,
-      prettify: config.prettify,
+      prettify: this.prettify,
       // onStart(val) {
       //   // this.$emit('start', val)
       // },
@@ -208,7 +220,12 @@ export default {
 </script>
 
 <style>
-#hist-slider-wrapper {
+#slider-wrapper {
+  width: 100%;
+  margin-top: -30px;
+}
+
+#vue-histogram-slider-wrapper {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -365,108 +382,6 @@ export default {
   border-color: transparent !important;
 }
 
-.irs--flat {
-  height: 40px;
-}
-
-.irs--flat.irs-with-grid {
-  height: 60px;
-}
-
-.irs--flat .irs-line {
-  top: 25px;
-  height: 12px;
-  background-color: #e1e4e9;
-  border-radius: 4px;
-}
-
-.irs--flat .irs-bar {
-  top: 25px;
-  height: 12px;
-  background-color: #ed5565;
-}
-
-.irs--flat .irs-bar--single {
-  border-radius: 4px 0 0 4px;
-}
-
-.irs--flat .irs-shadow {
-  height: 1px;
-  bottom: 16px;
-  background-color: #e1e4e9;
-}
-
-.irs--flat .irs-handle {
-  top: 22px;
-  width: 16px;
-  height: 18px;
-  background-color: transparent;
-}
-
-.irs--flat .irs-handle > i:first-child {
-  position: absolute;
-  display: block;
-  top: 0;
-  left: 50%;
-  width: 2px;
-  height: 100%;
-  margin-left: -1px;
-  background-color: #da4453;
-}
-
-.irs--flat .irs-handle.state_hover > i:first-child,
-.irs--flat .irs-handle:hover > i:first-child {
-  background-color: #a43540;
-}
-
-.irs--flat .irs-min,
-.irs--flat .irs-max {
-  top: 0;
-  padding: 1px 3px;
-  color: #999;
-  font-size: 10px;
-  line-height: 1.333;
-  text-shadow: none;
-  background-color: #e1e4e9;
-  border-radius: 4px;
-}
-
-.irs--flat .irs-from,
-.irs--flat .irs-to,
-.irs--flat .irs-single {
-  color: white;
-  font-size: 10px;
-  line-height: 1.333;
-  text-shadow: none;
-  padding: 1px 5px;
-  background-color: #ed5565;
-  border-radius: 4px;
-}
-
-.irs--flat .irs-from:before,
-.irs--flat .irs-to:before,
-.irs--flat .irs-single:before {
-  position: absolute;
-  display: block;
-  content: "";
-  bottom: -6px;
-  left: 50%;
-  width: 0;
-  height: 0;
-  margin-left: -3px;
-  overflow: hidden;
-  border: 3px solid transparent;
-  border-top-color: #ed5565;
-}
-
-.irs--flat .irs-grid-pol {
-  background-color: #e1e4e9;
-}
-
-.irs--flat .irs-grid-text {
-  color: #999;
-}
-
 .irs--round {
   height: 50px;
 }
@@ -478,14 +393,14 @@ export default {
 .irs--round .irs-line {
   top: 36px;
   height: 4px;
-  background-color: #dee4ec;
+  background-color: var(--holder-color);
   border-radius: 4px;
 }
 
 .irs--round .irs-bar {
   top: 36px;
   height: 4px;
-  background-color: #0091ff;
+  background-color: var(--primary-color);
 }
 
 .irs--round .irs-bar--single {
@@ -504,7 +419,7 @@ export default {
   width: 16px;
   height: 16px;
   /* border: 4px solid #006cfa; */
-  background-color: white;
+  background-color: var(--handle-color);
   border-radius: 18px;
   box-shadow: 0 1px 3px rgba(0, 0, 255, 0.3);
 }
@@ -533,7 +448,7 @@ export default {
   line-height: 1;
   text-shadow: none;
   padding: 3px 5px;
-  background-color: #0091ff;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 4px;
 }
@@ -551,7 +466,7 @@ export default {
   margin-left: -3px;
   overflow: hidden;
   border: 3px solid transparent;
-  border-top-color: #0091ff;
+  border-top-color: var(--primary-color);
 }
 
 .irs--round .irs-grid {
@@ -563,7 +478,7 @@ export default {
 }
 
 .irs--round .irs-grid-text {
-  color: silver;
+  color: var(--grid-text-color);
   font-size: 13px;
 }
 </style>
