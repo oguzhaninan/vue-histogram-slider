@@ -69,6 +69,7 @@ prettify|function|null|Set up your own prettify function. Can be anything. For e
 line-height|number|6|Set slider line height
 transition-duration|number|100|Set duration to histogram bars
 primary-color|string|#0091ff|Primary color
+label-color|string|#0091ff|Label color
 holder-color|string|#dee4ec|Holder color
 handle-color|string|#ffffff|Slider handle color
 grid-text-color|string|silver|Primary color

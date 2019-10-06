@@ -25,6 +25,7 @@ export default {
       return `
         width: ${this.width}px;
         --primary-color: ${this.primaryColor};
+        --label-color: ${this.labelColor};
         --holder-color: ${this.holderColor};
         --handle-color: ${this.handleColor};
         --grid-text-color: ${this.gridTextColor};
@@ -375,7 +376,7 @@ export default {
   line-height: 1;
   text-shadow: none;
   padding: 3px 5px;
-  background-color: var(--primary-color);
+  background-color: var(--label-color);
   color: white;
   border-radius: 4px;
 }

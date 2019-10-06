@@ -85,6 +85,10 @@ export default {
     default: 4
   },
   prettify: Function,
+  labelColor: {
+    type: String,
+    default: "#0091ff"
+  },
   primaryColor: {
     type: String,
     default: "#0091ff"
