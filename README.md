@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./resources/header.png" width="500">
+    <img src="https://raw.githubusercontent.com/oguzhaninan/vue-histogram-slider/master/resources/header.png" width="500">
 </p>
 <p align="center">
  Range slider with histogram for <a href="http://vuejs.org/" rel="nofollow" class="rich-diff-level-one">Vue</a>
@@ -15,7 +15,7 @@ If you are a try and learn developer, you can start trying the vue-histogram-sli
 
 
 <p align="center">
-    <img src="./resources/histogram-slider-demo.gif">
+    <img src="https://github.com/oguzhaninan/vue-histogram-slider/raw/master/resources/histogram-slider-demo.gif">
 </p>
 
 ## Installation    
