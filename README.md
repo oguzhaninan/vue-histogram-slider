@@ -67,11 +67,14 @@ bar-gap|number|5|Set histogram bar gap
 bar-radius|number|4|Set histogram bar radius
 prettify|function|null|Set up your own prettify function. Can be anything. For example, you can set up unix time as slider values and than transform them to cool looking dates.
 line-height|number|6|Set slider line height
+transition-duration|number|100|Set duration to histogram bars
 primary-color|string|#0091ff|Primary color
 holder-color|string|#dee4ec|Holder color
 handle-color|string|#ffffff|Slider handle color
 grid-text-color|string|silver|Primary color
-transition-duration|number|100|Set duration to histogram bars
+font-family|string|'Arial, sans-serif'|Set text font family
+font-size|number|12|Set text font size
+hist-slider-gap|number|6|Set gap between slider and histogram
 
 ## Event
 Name|Description

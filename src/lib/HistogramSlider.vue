@@ -30,6 +30,9 @@ export default {
         --handle-color: ${this.handleColor};
         --grid-text-color: ${this.gridTextColor};
         --line-height: ${this.lineHeight}px;
+        --font-family: ${this.fontFamily};
+        --font-size: ${this.fontSize};
+        --hist-slider-gap: ${-36 + this.histSliderGap}px;
       `;
     }
   },
@@ -128,7 +131,7 @@ export default {
 <style>
 #slider-wrapper {
   width: 100%;
-  margin-top: -30px;
+  margin-top: var(--hist-slider-gap);
 }
 
 #vue-histogram-slider-wrapper {
@@ -138,6 +141,8 @@ export default {
 }
 
 .irs {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
   position: relative;
   display: block;
   -webkit-touch-callout: none;
@@ -146,8 +151,6 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  font-size: 12px;
-  font-family: Arial, sans-serif;
 }
 
 .irs-line {

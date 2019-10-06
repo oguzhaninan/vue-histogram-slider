@@ -108,5 +108,17 @@ export default {
   transitionDuration: {
     type: Number,
     default: 100
+  },
+  fontFamily: {
+    type: String,
+    default: "Arial, sans-serif"
+  },
+  fontSize: {
+    type: Number,
+    default: 12
+  },
+  histSliderGap: {
+    type: Number,
+    default: 6
   }
 };
