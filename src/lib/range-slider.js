@@ -1,8 +1,6 @@
 /* eslint-disable */
 import * as $ from "jquery";
 
-var plugin_count = 0;
-
 // =================================================================================================================
 // Template
 
@@ -11,7 +9,7 @@ var base_html =
   '<span class="irs-line" tabindex="0"></span>' +
   '<span class="irs-min">0</span><span class="irs-max">1</span>' +
   '<span class="irs-from">0</span><span class="irs-to">0</span><span class="irs-single">0</span>' +
-  '</span>' +
+  "</span>" +
   '<span class="irs-grid"></span>';
 
 var single_html =
@@ -40,7 +38,7 @@ var disable_html = '<span class="irs-disable-mask"></span>';
  * @constructor
  */
 var IonRangeSlider = function(element, options) {
-  this.input = document.querySelector(element);
+  this.input = $(element);
   this.plugin_count = Math.random().toString(36).substr(2);
   this.current_plugin = 0;
   this.calc_count = 0;
@@ -65,9 +63,9 @@ var IonRangeSlider = function(element, options) {
 
   // cache for links to all DOM elements
   this.$cache = {
-    win: window,
-    body: document.body,
-    input: this.input,
+    win: $(window),
+    body: $(document.body),
+    input: $(element),
     cont: null,
     rs: null,
     min: null,
@@ -148,7 +146,7 @@ var IonRangeSlider = function(element, options) {
    * get and validate config
    */
   var $inp = this.$cache.input,
-    val = $inp.getAttribute("value") || undefined,
+    val = $inp.prop("value"),
     config,
     config_from_data,
     prop;
@@ -218,66 +216,66 @@ var IonRangeSlider = function(element, options) {
   };
 
   // check if base element is input
-  if ($inp.nodeName !== "INPUT") {
+  if ($inp[0].nodeName !== "INPUT") {
     console &&
       console.warn &&
-      console.warn("Base element should be <input>!", $inp);
+      console.warn("Base element should be <input>!", $inp[0]);
   }
 
   // config from data-attributes extends js config
   config_from_data = {
-    skin: undefined,
-    type: undefined,
+    skin: $inp.data("skin"),
+    type: $inp.data("type"),
 
-    min: undefined,
-    max: undefined,
-    from: undefined,
-    to: undefined,
-    step: undefined,
+    min: $inp.data("min"),
+    max: $inp.data("max"),
+    from: $inp.data("from"),
+    to: $inp.data("to"),
+    step: $inp.data("step"),
 
-    min_interval: undefined,
-    max_interval: undefined,
-    drag_interval: undefined,
+    min_interval: $inp.data("minInterval"),
+    max_interval: $inp.data("maxInterval"),
+    drag_interval: $inp.data("dragInterval"),
 
-    values: undefined,
+    values: $inp.data("values"),
 
-    from_fixed: undefined,
-    from_min: undefined,
-    from_max: undefined,
-    from_shadow: undefined,
+    from_fixed: $inp.data("fromFixed"),
+    from_min: $inp.data("fromMin"),
+    from_max: $inp.data("fromMax"),
+    from_shadow: $inp.data("fromShadow"),
 
-    to_fixed: undefined,
-    to_min: undefined,
-    to_max: undefined,
-    to_shadow: undefined,
+    to_fixed: $inp.data("toFixed"),
+    to_min: $inp.data("toMin"),
+    to_max: $inp.data("toMax"),
+    to_shadow: $inp.data("toShadow"),
 
-    prettify_enabled: undefined,
-    prettify_separator: undefined,
+    prettify_enabled: $inp.data("prettifyEnabled"),
+    prettify_separator: $inp.data("prettifySeparator"),
 
-    force_edges: undefined,
+    force_edges: $inp.data("forceEdges"),
 
-    keyboard: undefined,
+    keyboard: $inp.data("keyboard"),
 
-    grid: undefined,
-    grid_margin: undefined,
-    grid_num: undefined,
-    grid_snap: undefined,
+    grid: $inp.data("grid"),
+    grid_margin: $inp.data("gridMargin"),
+    grid_num: $inp.data("gridNum"),
+    grid_snap: $inp.data("gridSnap"),
 
-    hide_min_max: undefined,
-    hide_from_to: undefined,
+    hide_min_max: $inp.data("hideMinMax"),
+    hide_from_to: $inp.data("hideFromTo"),
 
-    prefix: undefined,
-    postfix: undefined,
-    max_postfix: undefined,
-    decorate_both: undefined,
-    values_separator: undefined,
+    prefix: $inp.data("prefix"),
+    postfix: $inp.data("postfix"),
+    max_postfix: $inp.data("maxPostfix"),
+    decorate_both: $inp.data("decorateBoth"),
+    values_separator: $inp.data("valuesSeparator"),
 
-    input_values_separator: undefined,
+    input_values_separator: $inp.data("inputValuesSeparator"),
 
-    disable: undefined,
-    block: undefined,
+    disable: $inp.data("disable"),
+    block: $inp.data("block"),
 
-    extra_classes: undefined,
+    extra_classes: $inp.data("extraClasses")
   };
   config_from_data.values =
     config_from_data.values && config_from_data.values.split(",");
@@ -393,53 +391,53 @@ IonRangeSlider.prototype = {
       " " +
       this.options.extra_classes +
       '"></span>';
-    this.$cache.input.innerHTML = container_html + this.$cache.input.innerHTML;
-    this.$cache.input.getAttribute("readonly") || true;
-    this.$cache.cont = this.$cache.input.parentElement;
+    this.$cache.input.before(container_html);
+    this.$cache.input.prop("readonly", true);
+    this.$cache.cont = this.$cache.input.prev();
     this.result.slider = this.$cache.cont;
-      
-    this.$cache.cont.innerHTML = base_html;
-    this.$cache.rs = this.$cache.cont.querySelector(".irs");
-    this.$cache.min = this.$cache.cont.querySelector(".irs-min");
-    this.$cache.max = this.$cache.cont.querySelector(".irs-max");
-    this.$cache.from = this.$cache.cont.querySelector(".irs-from");
-    this.$cache.to = this.$cache.cont.querySelector(".irs-to");
-    this.$cache.single = this.$cache.cont.querySelector(".irs-single");
-    this.$cache.line = this.$cache.cont.querySelector(".irs-line");
-    this.$cache.grid = this.$cache.cont.querySelector(".irs-grid");
+
+    this.$cache.cont.html(base_html);
+    this.$cache.rs = this.$cache.cont.find(".irs");
+    this.$cache.min = this.$cache.cont.find(".irs-min");
+    this.$cache.max = this.$cache.cont.find(".irs-max");
+    this.$cache.from = this.$cache.cont.find(".irs-from");
+    this.$cache.to = this.$cache.cont.find(".irs-to");
+    this.$cache.single = this.$cache.cont.find(".irs-single");
+    this.$cache.line = this.$cache.cont.find(".irs-line");
+    this.$cache.grid = this.$cache.cont.find(".irs-grid");
 
     if (this.options.type === "single") {
-      this.$cache.cont.innerHTML += single_html;
-      this.$cache.bar = this.$cache.cont.querySelector(".irs-bar");
-      this.$cache.edge = this.$cache.cont.querySelector(".irs-bar-edge");
-      this.$cache.s_single = this.$cache.cont.querySelector(".single");
-      this.$cache.from.style.visibility = "hidden";
-      this.$cache.to.style.visibility = "hidden";
-      this.$cache.shad_single = this.$cache.cont.querySelector(".shadow-single");
+      this.$cache.cont.append(single_html);
+      this.$cache.bar = this.$cache.cont.find(".irs-bar");
+      this.$cache.edge = this.$cache.cont.find(".irs-bar-edge");
+      this.$cache.s_single = this.$cache.cont.find(".single");
+      this.$cache.from[0].style.visibility = "hidden";
+      this.$cache.to[0].style.visibility = "hidden";
+      this.$cache.shad_single = this.$cache.cont.find(".shadow-single");
     } else {
-      this.$cache.cont.innerHTML += double_html;
-      this.$cache.bar = this.$cache.cont.querySelector(".irs-bar");
-      this.$cache.s_from = this.$cache.cont.querySelector(".from");
-      this.$cache.s_to = this.$cache.cont.querySelector(".to");
-      this.$cache.shad_from = this.$cache.cont.querySelector(".shadow-from");
-      this.$cache.shad_to = this.$cache.cont.querySelector(".shadow-to");
+      this.$cache.cont.append(double_html);
+      this.$cache.bar = this.$cache.cont.find(".irs-bar");
+      this.$cache.s_from = this.$cache.cont.find(".from");
+      this.$cache.s_to = this.$cache.cont.find(".to");
+      this.$cache.shad_from = this.$cache.cont.find(".shadow-from");
+      this.$cache.shad_to = this.$cache.cont.find(".shadow-to");
 
       this.setTopHandler();
     }
 
     if (this.options.hide_from_to) {
-      this.$cache.from.style.display = "none";
-      this.$cache.to.style.display = "none";
-      this.$cache.single.style.display = "none";
+      this.$cache.from[0].style.display = "none";
+      this.$cache.to[0].style.display = "none";
+      this.$cache.single[0].style.display = "none";
     }
 
     this.appendGrid();
 
     if (this.options.disable) {
       this.appendDisableMask();
-      this.$cache.input.disabled = true;
+      this.$cache.input[0].disabled = true;
     } else {
-      this.$cache.input.disabled = false;
+      this.$cache.input[0].disabled = false;
       this.removeDisableMask();
       this.bindEvents();
     }
@@ -454,7 +452,7 @@ IonRangeSlider.prototype = {
     }
 
     if (this.options.drag_interval) {
-      this.$cache.bar.style.cursor = "grabbing";
+      this.$cache.bar[0].style.cursor = "ew-resize";
     }
   },
 
@@ -469,9 +467,9 @@ IonRangeSlider.prototype = {
       to = this.options.to;
 
     if (from > min && to === max) {
-      this.$cache.s_from.classList.add("type_last");
+      this.$cache.s_from.addClass("type_last");
     } else if (to < max) {
-      this.$cache.s_to.classList.add("type_last");
+      this.$cache.s_to.addClass("type_last");
     }
   },
 
@@ -487,23 +485,23 @@ IonRangeSlider.prototype = {
         this.coords.p_gap = this.toFixed(
           this.coords.p_pointer - this.coords.p_single_fake
         );
-        this.$cache.s_single.classList.add("state_hover");
+        this.$cache.s_single.addClass("state_hover");
         break;
       case "from":
         this.coords.p_gap = this.toFixed(
           this.coords.p_pointer - this.coords.p_from_fake
         );
-        this.$cache.s_from.classList.add("state_hover");
-        this.$cache.s_from.classList.add("type_last");
-        this.$cache.s_to.classList.remove("type_last");
+        this.$cache.s_from.addClass("state_hover");
+        this.$cache.s_from.addClass("type_last");
+        this.$cache.s_to.removeClass("type_last");
         break;
       case "to":
         this.coords.p_gap = this.toFixed(
           this.coords.p_pointer - this.coords.p_to_fake
         );
-        this.$cache.s_to.classList.add("state_hover");
-        this.$cache.s_to.classList.add("type_last");
-        this.$cache.s_from.classList.remove("type_last");
+        this.$cache.s_to.addClass("state_hover");
+        this.$cache.s_to.addClass("type_last");
+        this.$cache.s_from.removeClass("type_last");
         break;
       case "both":
         this.coords.p_gap_left = this.toFixed(
@@ -512,8 +510,8 @@ IonRangeSlider.prototype = {
         this.coords.p_gap_right = this.toFixed(
           this.coords.p_to_fake - this.coords.p_pointer
         );
-        this.$cache.s_to.classList.remove("type_last");
-        this.$cache.s_from.classList.remove("type_last");
+        this.$cache.s_to.removeClass("type_last");
+        this.$cache.s_from.removeClass("type_last");
         break;
     }
   },
@@ -524,7 +522,7 @@ IonRangeSlider.prototype = {
    */
   appendDisableMask: function() {
     this.$cache.cont.append(disable_html);
-    this.$cache.cont.classList.add("irs-disabled");
+    this.$cache.cont.addClass("irs-disabled");
   },
 
   /**
@@ -533,7 +531,7 @@ IonRangeSlider.prototype = {
    */
   removeDisableMask: function() {
     this.$cache.cont.remove(".irs-disable-mask");
-    this.$cache.cont.classList.remove("irs-disabled");
+    this.$cache.cont.removeClass("irs-disabled");
   },
 
   /**
@@ -544,13 +542,13 @@ IonRangeSlider.prototype = {
     this.$cache.cont.remove();
     this.$cache.cont = null;
 
-    this.$cache.line.removeEventListener("keydown.irs_" + this.plugin_count);
+    this.$cache.line.off("keydown.irs_" + this.plugin_count);
 
-    this.$cache.body.removeEventListener("touchmove.irs_" + this.plugin_count);
-    this.$cache.body.removeEventListener("mousemove.irs_" + this.plugin_count);
+    this.$cache.body.off("touchmove.irs_" + this.plugin_count);
+    this.$cache.body.off("mousemove.irs_" + this.plugin_count);
 
-    this.$cache.win.removeEventListener("touchend.irs_" + this.plugin_count);
-    this.$cache.win.removeEventListener("mouseup.irs_" + this.plugin_count);
+    this.$cache.win.off("touchend.irs_" + this.plugin_count);
+    this.$cache.win.off("mouseup.irs_" + this.plugin_count);
 
     this.$cache.grid_labels = [];
     this.coords.big = [];
@@ -569,151 +567,151 @@ IonRangeSlider.prototype = {
       return;
     }
 
-    this.$cache.body.addEventListener(
+    this.$cache.body.on(
       "touchmove.irs_" + this.plugin_count,
       this.pointerMove.bind(this)
     );
-    this.$cache.body.addEventListener(
+    this.$cache.body.on(
       "mousemove.irs_" + this.plugin_count,
       this.pointerMove.bind(this)
     );
 
-    this.$cache.win.addEventListener(
+    this.$cache.win.on(
       "touchend.irs_" + this.plugin_count,
       this.pointerUp.bind(this)
     );
-    this.$cache.win.addEventListener(
+    this.$cache.win.on(
       "mouseup.irs_" + this.plugin_count,
       this.pointerUp.bind(this)
     );
 
-    this.$cache.line.addEventListener(
+    this.$cache.line.on(
       "touchstart.irs_" + this.plugin_count,
       this.pointerClick.bind(this, "click")
     );
-    this.$cache.line.addEventListener(
+    this.$cache.line.on(
       "mousedown.irs_" + this.plugin_count,
       this.pointerClick.bind(this, "click")
     );
 
-    this.$cache.line.addEventListener(
+    this.$cache.line.on(
       "focus.irs_" + this.plugin_count,
       this.pointerFocus.bind(this)
     );
 
     if (this.options.drag_interval && this.options.type === "double") {
-      this.$cache.bar.addEventListener(
+      this.$cache.bar.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "both")
       );
-      this.$cache.bar.addEventListener(
+      this.$cache.bar.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "both")
       );
     } else {
-      this.$cache.bar.addEventListener(
+      this.$cache.bar.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
-      this.$cache.bar.addEventListener(
+      this.$cache.bar.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
     }
 
     if (this.options.type === "single") {
-      this.$cache.single.addEventListener(
+      this.$cache.single.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "single")
       );
-      this.$cache.s_single.addEventListener(
+      this.$cache.s_single.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "single")
       );
-      this.$cache.shad_single.addEventListener(
+      this.$cache.shad_single.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
 
-      this.$cache.single.addEventListener(
+      this.$cache.single.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "single")
       );
-      this.$cache.s_single.addEventListener(
+      this.$cache.s_single.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "single")
       );
-      this.$cache.edge.addEventListener(
+      this.$cache.edge.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
-      this.$cache.shad_single.addEventListener(
+      this.$cache.shad_single.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
     } else {
-      this.$cache.single.addEventListener(
+      this.$cache.single.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, null)
       );
-      this.$cache.single.addEventListener(
+      this.$cache.single.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, null)
       );
 
-      this.$cache.from.addEventListener(
+      this.$cache.from.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "from")
       );
-      this.$cache.s_from.addEventListener(
+      this.$cache.s_from.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "from")
       );
-      this.$cache.to.addEventListener(
+      this.$cache.to.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "to")
       );
-      this.$cache.s_to.addEventListener(
+      this.$cache.s_to.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "to")
       );
-      this.$cache.shad_from.addEventListener(
+      this.$cache.shad_from.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
-      this.$cache.shad_to.addEventListener(
+      this.$cache.shad_to.on(
         "touchstart.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
 
-      this.$cache.from.addEventListener(
+      this.$cache.from.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "from")
       );
-      this.$cache.s_from.addEventListener(
+      this.$cache.s_from.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "from")
       );
-      this.$cache.to.addEventListener(
+      this.$cache.to.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "to")
       );
-      this.$cache.s_to.addEventListener(
+      this.$cache.s_to.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "to")
       );
-      this.$cache.shad_from.addEventListener(
+      this.$cache.shad_from.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
-      this.$cache.shad_to.addEventListener(
+      this.$cache.shad_to.on(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
     }
 
     if (this.options.keyboard) {
-      this.$cache.line.addEventListener(
+      this.$cache.line.on(
         "keydown.irs_" + this.plugin_count,
         this.key.bind(this, "keyboard")
       );
@@ -783,7 +781,7 @@ IonRangeSlider.prototype = {
       return;
     }
 
-    this.$cache.cont.querySelector(".state_hover").classList.remove("state_hover");
+    this.$cache.cont.find(".state_hover").removeClass("state_hover");
 
     this.force_redraw = true;
 
@@ -791,7 +789,7 @@ IonRangeSlider.prototype = {
     this.restoreOriginalMinInterval();
 
     // callbacks call
-    if ($.contains(this.$cache.cont, e.target) || this.dragging) {
+    if ($.contains(this.$cache.cont[0], e.target) || this.dragging) {
       this.callOnFinish();
     }
 
@@ -938,14 +936,18 @@ IonRangeSlider.prototype = {
     }
 
     if (this.options.hide_min_max) {
-      this.$cache.min.style.display = "none";
-      this.$cache.max.style.display = "none";
+      this.$cache.min[0].style.display = "none";
+      this.$cache.max[0].style.display = "none";
       return;
     }
 
     if (this.options.values.length) {
-      this.$cache.min.innerHTML = this.decorate(this.options.p_values[this.options.min])
-      this.$cache.max.innerHTML =  this.decorate(this.options.p_values[this.options.max])
+      this.$cache.min.html(
+        this.decorate(this.options.p_values[this.options.min])
+      );
+      this.$cache.max.html(
+        this.decorate(this.options.p_values[this.options.max])
+      );
     } else {
       var min_pretty = this._prettify(this.options.min);
       var max_pretty = this._prettify(this.options.max);
@@ -953,12 +955,12 @@ IonRangeSlider.prototype = {
       this.result.min_pretty = min_pretty;
       this.result.max_pretty = max_pretty;
 
-      this.$cache.min.innerHTML = this.decorate(min_pretty, this.options.min);
-      this.$cache.max.innerHTML = this.decorate(max_pretty, this.options.max);
+      this.$cache.min.html(this.decorate(min_pretty, this.options.min));
+      this.$cache.max.html(this.decorate(max_pretty, this.options.max));
     }
 
-    this.labels.w_min = this.$cache.min.offsetWidth;
-    this.labels.w_max = this.$cache.max.offsetWidth;
+    this.labels.w_min = this.$cache.min.outerWidth(false);
+    this.labels.w_max = this.$cache.max.outerWidth(false);
   },
 
   /**
@@ -1002,7 +1004,7 @@ IonRangeSlider.prototype = {
 
     if (this.calc_count === 10 || update) {
       this.calc_count = 0;
-      this.coords.w_rs = this.$cache.rs.offsetWidth;
+      this.coords.w_rs = this.$cache.rs.outerWidth(false);
 
       this.calcHandlePercent();
     }
@@ -1325,9 +1327,9 @@ IonRangeSlider.prototype = {
 
   calcHandlePercent: function() {
     if (this.options.type === "single") {
-      this.coords.w_handle = this.$cache.s_single.offsetWidth;
+      this.coords.w_handle = this.$cache.s_single.outerWidth(false);
     } else {
-      this.coords.w_handle = this.$cache.s_from.offsetWidth;
+      this.coords.w_handle = this.$cache.s_from.outerWidth(false);
     }
 
     this.coords.p_handle = this.toFixed(
@@ -1377,7 +1379,7 @@ IonRangeSlider.prototype = {
     }
 
     if (this.options.type === "single") {
-      this.labels.w_single = this.$cache.single.offsetWidth;
+      this.labels.w_single = this.$cache.single.outerWidth(false);
       this.labels.p_single_fake =
         (this.labels.w_single / this.coords.w_rs) * 100;
       this.labels.p_single_left =
@@ -1389,7 +1391,7 @@ IonRangeSlider.prototype = {
         this.labels.p_single_fake
       );
     } else {
-      this.labels.w_from = this.$cache.from.offsetWidth;
+      this.labels.w_from = this.$cache.from.outerWidth(false);
       this.labels.p_from_fake = (this.labels.w_from / this.coords.w_rs) * 100;
       this.labels.p_from_left =
         this.coords.p_from_fake +
@@ -1401,7 +1403,7 @@ IonRangeSlider.prototype = {
         this.labels.p_from_fake
       );
 
-      this.labels.w_to = this.$cache.to.offsetWidth;
+      this.labels.w_to = this.$cache.to.outerWidth(false);
       this.labels.p_to_fake = (this.labels.w_to / this.coords.w_rs) * 100;
       this.labels.p_to_left =
         this.coords.p_to_fake +
@@ -1413,7 +1415,7 @@ IonRangeSlider.prototype = {
         this.labels.p_to_fake
       );
 
-      this.labels.w_single = this.$cache.single.offsetWidth;
+      this.labels.w_single = this.$cache.single.outerWidth(false);
       this.labels.p_single_fake =
         (this.labels.w_single / this.coords.w_rs) * 100;
       this.labels.p_single_left =
@@ -1463,7 +1465,7 @@ IonRangeSlider.prototype = {
    * Draw handles
    */
   drawHandles: function() {
-    this.coords.w_rs = this.$cache.rs.offsetWidth;
+    this.coords.w_rs = this.$cache.rs.outerWidth(false);
 
     if (!this.coords.w_rs) {
       return;
@@ -1503,29 +1505,29 @@ IonRangeSlider.prototype = {
     ) {
       this.drawLabels();
 
-      this.$cache.bar.style.left = this.coords.p_bar_x + "%";
-      this.$cache.bar.style.width = this.coords.p_bar_w + "%";
+      this.$cache.bar[0].style.left = this.coords.p_bar_x + "%";
+      this.$cache.bar[0].style.width = this.coords.p_bar_w + "%";
 
       if (this.options.type === "single") {
-        this.$cache.bar.style.left = 0;
-        this.$cache.bar.style.width =
+        this.$cache.bar[0].style.left = 0;
+        this.$cache.bar[0].style.width =
           this.coords.p_bar_w + this.coords.p_bar_x + "%";
 
-        this.$cache.s_single.style.left = this.coords.p_single_fake + "%";
+        this.$cache.s_single[0].style.left = this.coords.p_single_fake + "%";
 
-        this.$cache.single.style.left = this.labels.p_single_left + "%";
+        this.$cache.single[0].style.left = this.labels.p_single_left + "%";
       } else {
-        this.$cache.s_from.style.left = this.coords.p_from_fake + "%";
-        this.$cache.s_to.style.left = this.coords.p_to_fake + "%";
+        this.$cache.s_from[0].style.left = this.coords.p_from_fake + "%";
+        this.$cache.s_to[0].style.left = this.coords.p_to_fake + "%";
 
         if (this.old_from !== this.result.from || this.force_redraw) {
-          this.$cache.from.style.left = this.labels.p_from_left + "%";
+          this.$cache.from[0].style.left = this.labels.p_from_left + "%";
         }
         if (this.old_to !== this.result.to || this.force_redraw) {
-          this.$cache.to.style.left = this.labels.p_to_left + "%";
+          this.$cache.to[0].style.left = this.labels.p_to_left + "%";
         }
 
-        this.$cache.single.style.left = this.labels.p_single_left + "%";
+        this.$cache.single[0].style.left = this.labels.p_single_left + "%";
       }
 
       this.writeToInput();
@@ -1593,29 +1595,29 @@ IonRangeSlider.prototype = {
     if (this.options.type === "single") {
       if (values_num) {
         text_single = this.decorate(p_values[this.result.from]);
-        this.$cache.single.innerHTML = text_single;
+        this.$cache.single.html(text_single);
       } else {
         from_pretty = this._prettify(this.result.from);
 
         text_single = this.decorate(from_pretty, this.result.from);
-        this.$cache.single.innerHTML = text_single;
+        this.$cache.single.html(text_single);
       }
 
       this.calcLabels();
 
       if (this.labels.p_single_left < this.labels.p_min + 1) {
-        this.$cache.min.style.visibility = "hidden";
+        this.$cache.min[0].style.visibility = "hidden";
       } else {
-        this.$cache.min.style.visibility = "visible";
+        this.$cache.min[0].style.visibility = "visible";
       }
 
       if (
         this.labels.p_single_left + this.labels.p_single_fake >
         100 - this.labels.p_max - 1
       ) {
-        this.$cache.max.style.visibility = "hidden";
+        this.$cache.max[0].style.visibility = "hidden";
       } else {
-        this.$cache.max.style.visibility = "visible";
+        this.$cache.max[0].style.visibility = "visible";
       }
     } else {
       if (values_num) {
@@ -1633,9 +1635,9 @@ IonRangeSlider.prototype = {
         text_from = this.decorate(p_values[this.result.from]);
         text_to = this.decorate(p_values[this.result.to]);
 
-        this.$cache.single.innerHTML = text_single;
-        this.$cache.from.innerHTML = text_from;
-        this.$cache.to.innerHTML = text_to;
+        this.$cache.single.html(text_single);
+        this.$cache.from.html(text_from);
+        this.$cache.to.html(text_to);
       } else {
         from_pretty = this._prettify(this.result.from);
         to_pretty = this._prettify(this.result.to);
@@ -1653,9 +1655,9 @@ IonRangeSlider.prototype = {
         text_from = this.decorate(from_pretty, this.result.from);
         text_to = this.decorate(to_pretty, this.result.to);
 
-        this.$cache.single.innerHTML = text_single;
-        this.$cache.from.innerHTML = text_from;
-        this.$cache.to.innerHTML = text_to;
+        this.$cache.single.html(text_single);
+        this.$cache.from.html(text_from);
+        this.$cache.to.html(text_to);
       }
 
       this.calcLabels();
@@ -1669,42 +1671,42 @@ IonRangeSlider.prototype = {
         this.labels.p_from_left + this.labels.p_from_fake >=
         this.labels.p_to_left
       ) {
-        this.$cache.from.style.visibility = "hidden";
-        this.$cache.to.style.visibility = "hidden";
-        this.$cache.single.style.visibility = "visible";
+        this.$cache.from[0].style.visibility = "hidden";
+        this.$cache.to[0].style.visibility = "hidden";
+        this.$cache.single[0].style.visibility = "visible";
 
         if (this.result.from === this.result.to) {
           if (this.target === "from") {
-            this.$cache.from.style.visibility = "visible";
+            this.$cache.from[0].style.visibility = "visible";
           } else if (this.target === "to") {
-            this.$cache.to.style.visibility = "visible";
+            this.$cache.to[0].style.visibility = "visible";
           } else if (!this.target) {
-            this.$cache.from.style.visibility = "visible";
+            this.$cache.from[0].style.visibility = "visible";
           }
-          this.$cache.single.style.visibility = "hidden";
+          this.$cache.single[0].style.visibility = "hidden";
           max = to_left;
         } else {
-          this.$cache.from.style.visibility = "hidden";
-          this.$cache.to.style.visibility = "hidden";
-          this.$cache.single.style.visibility = "visible";
+          this.$cache.from[0].style.visibility = "hidden";
+          this.$cache.to[0].style.visibility = "hidden";
+          this.$cache.single[0].style.visibility = "visible";
           max = Math.max(single_left, to_left);
         }
       } else {
-        this.$cache.from.style.visibility = "visible";
-        this.$cache.to.style.visibility = "visible";
-        this.$cache.single.style.visibility = "hidden";
+        this.$cache.from[0].style.visibility = "visible";
+        this.$cache.to[0].style.visibility = "visible";
+        this.$cache.single[0].style.visibility = "hidden";
       }
 
       if (min < this.labels.p_min + 1) {
-        this.$cache.min.style.visibility = "hidden";
+        this.$cache.min[0].style.visibility = "hidden";
       } else {
-        this.$cache.min.style.visibility = "visible";
+        this.$cache.min[0].style.visibility = "visible";
       }
 
       if (max > 100 - this.labels.p_max - 1) {
-        this.$cache.max.style.visibility = "hidden";
+        this.$cache.max[0].style.visibility = "hidden";
       } else {
-        this.$cache.max.style.visibility = "visible";
+        this.$cache.max[0].style.visibility = "visible";
       }
     }
   },
@@ -1756,11 +1758,11 @@ IonRangeSlider.prototype = {
         );
         from_min = from_min + this.coords.p_handle / 2;
 
-        c.shad_from.style.display = "block";
-        c.shad_from.style.left = from_min + "%";
-        c.shad_from.style.width = from_max + "%";
+        c.shad_from[0].style.display = "block";
+        c.shad_from[0].style.left = from_min + "%";
+        c.shad_from[0].style.width = from_max + "%";
       } else {
-        c.shad_from.style.display = "none";
+        c.shad_from[0].style.display = "none";
       }
 
       if (o.to_shadow && (is_to_min || is_to_max)) {
@@ -1770,11 +1772,11 @@ IonRangeSlider.prototype = {
         to_max = this.toFixed(to_max - (this.coords.p_handle / 100) * to_max);
         to_min = to_min + this.coords.p_handle / 2;
 
-        c.shad_to.style.display = "block";
-        c.shad_to.style.left = to_min + "%";
-        c.shad_to.style.width = to_max + "%";
+        c.shad_to[0].style.display = "block";
+        c.shad_to[0].style.left = to_min + "%";
+        c.shad_to[0].style.width = to_max + "%";
       } else {
-        c.shad_to.style.display = "none";
+        c.shad_to[0].style.display = "none";
       }
     }
   },
@@ -1785,23 +1787,29 @@ IonRangeSlider.prototype = {
   writeToInput: function() {
     if (this.options.type === "single") {
       if (this.options.values.length) {
-        this.$cache.input.getAttribute("value") || this.result.from_value;
+        this.$cache.input.prop("value", this.result.from_value);
       } else {
-        this.$cache.input.getAttribute("value") || this.result.from;
+        this.$cache.input.prop("value", this.result.from);
       }
-      this.$cache.input.getAttribute("from") || this.result.from;
+      this.$cache.input.data("from", this.result.from);
     } else {
       if (this.options.values.length) {
-        this.$cache.input.getAttribute("value") || this.result.from_value +
+        this.$cache.input.prop(
+          "value",
+          this.result.from_value +
             this.options.input_values_separator +
-            this.result.to_value;
+            this.result.to_value
+        );
       } else {
-        this.$cache.input.getAttribute("value") || this.result.from +
+        this.$cache.input.prop(
+          "value",
+          this.result.from +
             this.options.input_values_separator +
-            this.result.to;
+            this.result.to
+        );
       }
-      this.$cache.input.getAttribute("from") || this.result.from;
-      this.$cache.input.getAttribute("to") || this.result.to;
+      this.$cache.input.data("from", this.result.from);
+      this.$cache.input.data("to", this.result.to);
     }
   },
 
@@ -1866,10 +1874,10 @@ IonRangeSlider.prototype = {
   // Service methods
 
   toggleInput: function() {
-    this.$cache.input.classList.toggle("irs-hidden-input");
+    this.$cache.input.toggleClass("irs-hidden-input");
 
     if (this.has_tab_index) {
-      this.$cache.input.getAttribute("tabindex") || -1;
+      this.$cache.input.prop("tabindex", -1);
     } else {
       this.$cache.input.removeProp("tabindex");
     }
@@ -2408,8 +2416,8 @@ IonRangeSlider.prototype = {
     }
     this.coords.big_num = Math.ceil(big_num + 1);
 
-    this.$cache.cont.classList.add("irs-with-grid");
-    this.$cache.grid.innerHTML = html;
+    this.$cache.cont.addClass("irs-with-grid");
+    this.$cache.grid.html(html);
     this.cacheGridLabels();
   },
 
@@ -2419,8 +2427,7 @@ IonRangeSlider.prototype = {
       num = this.coords.big_num;
 
     for (i = 0; i < num; i++) {
-      $label = this.$cache.grid.querySelector(".js-grid-text-" + i);
-
+      $label = this.$cache.grid.find(".js-grid-text-" + i);
       this.$cache.grid_labels.push($label);
     }
 
@@ -2435,7 +2442,7 @@ IonRangeSlider.prototype = {
       num = this.coords.big_num;
 
     for (i = 0; i < num; i++) {
-      this.coords.big_w[i] = this.$cache.grid_labels[i].offsetWidth;
+      this.coords.big_w[i] = this.$cache.grid_labels[i].outerWidth(false);
       this.coords.big_p[i] = this.toFixed(
         (this.coords.big_w[i] / this.coords.w_rs) * 100
       );
@@ -2469,7 +2476,7 @@ IonRangeSlider.prototype = {
     this.calcGridCollision(4, start, finish);
 
     for (i = 0; i < num; i++) {
-      label = this.$cache.grid_labels[i];
+      label = this.$cache.grid_labels[i][0];
 
       if (this.coords.big_x[i] !== Number.POSITIVE_INFINITY) {
         label.style.marginLeft = -this.coords.big_x[i] + "%";
@@ -2490,7 +2497,8 @@ IonRangeSlider.prototype = {
       if (next_i >= num) {
         break;
       }
-      label = this.$cache.grid_labels[next_i];
+
+      label = this.$cache.grid_labels[next_i][0];
 
       if (finish[i] <= start[next_i]) {
         label.style.visibility = "visible";
@@ -2505,24 +2513,24 @@ IonRangeSlider.prototype = {
       return;
     }
 
-    this.coords.w_rs = this.$cache.rs.offsetWidth;
+    this.coords.w_rs = this.$cache.rs.outerWidth(false);
     if (!this.coords.w_rs) {
       return;
     }
 
     if (this.options.type === "single") {
-      this.coords.w_handle = this.$cache.s_single.offsetWidth;
+      this.coords.w_handle = this.$cache.s_single.outerWidth(false);
     } else {
-      this.coords.w_handle = this.$cache.s_from.offsetWidth;
+      this.coords.w_handle = this.$cache.s_from.outerWidth(false);
     }
     this.coords.p_handle = this.toFixed(
       (this.coords.w_handle / this.coords.w_rs) * 100
     );
     this.coords.grid_gap = this.toFixed(this.coords.p_handle / 2 - 0.1);
 
-    this.$cache.grid.style.width =
+    this.$cache.grid[0].style.width =
       this.toFixed(100 - this.coords.p_handle) + "%";
-    this.$cache.grid.style.left = this.coords.grid_gap + "%";
+    this.$cache.grid[0].style.left = this.coords.grid_gap + "%";
   },
 
   // =============================================================================================================
@@ -2564,8 +2572,8 @@ IonRangeSlider.prototype = {
     }
 
     this.toggleInput();
-    this.$cache.input.getAttribute("readonly") || false;
-    $.getAttribute(this.input,) ||"ionRangeSlider", null;
+    this.$cache.input.prop("readonly", false);
+    $.data(this.input, "ionRangeSlider", null);
 
     this.remove();
     this.input = null;
