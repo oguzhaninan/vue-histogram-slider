@@ -29,6 +29,7 @@ If you are a try and learn developer, you can start trying the vue-histogram-sli
 ```js
 import Vue from 'vue';
 import HistogramSlider from 'vue-histogram-slider';
+import 'vue-histogram-slider/dist/histogram-slider.css';
 
 Vue.component(HistogramSlider.name, HistogramSlider);
 ```
