@@ -4,8 +4,9 @@
 <p align="center">
  Range slider with histogram for <a href="http://vuejs.org/" rel="nofollow" class="rich-diff-level-one">Vue</a>
 </p>
+<hr>
 
-### Quick Start
+## Quick Start
 If you are a try and learn developer, you can start trying the vue-histogram-slider now using codesandbox.io.
 
 [![Edit Vue Histogram Slider](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-template-b7m0e)
