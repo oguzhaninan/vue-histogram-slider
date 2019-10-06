@@ -20,10 +20,12 @@ export default {
   props: {
     min: {
       type: Number,
+      default: 1,
       required: true
     },
     max: {
       type: Number,
+      default: 100,
       required: true
     },
     data: {
@@ -64,7 +66,7 @@ export default {
     },
     forceEdges: {
       type: Boolean,
-      default: true
+      default: false
     },
     dragInterval: {
       type: Boolean,
@@ -127,7 +129,7 @@ export default {
   computed: {
     style() {
       return `
-        width: ${this.width}px; 
+        width: ${this.width}px;
         --primary-color: ${this.primaryColor};
         --holder-color: ${this.holderColor};
         --handle-color: ${this.handleColor};
