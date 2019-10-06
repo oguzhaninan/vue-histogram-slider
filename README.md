@@ -9,16 +9,20 @@
 ## Quick Start
 If you are a try and learn developer, you can start trying the vue-histogram-slider now using codesandbox.io.
 
-[![Edit Vue Histogram Slider](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-template-b7m0e)
+<a href="https://codesandbox.io/s/vue-histogram-slider-b7m0e?fontsize=14" target="_blank">
+  <img alt="Edit Vue Histogram Slider" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+</a>
+
 
 <p align="center">
     <img src="./resources/histogram-slider-demo.gif">
 </p>
 
 ## Installation    
+### yarn
+`yarn add vue-histogram-slider`
 
-`yarn add vue-histogram-slider`   
-or    
+### npm
 `npm i vue-histogram-slider`
 
 ## Usage
