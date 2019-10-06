@@ -75,6 +75,7 @@ grid-text-color|string|silver|Primary color
 font-family|string|'Arial, sans-serif'|Set text font family
 font-size|number|12|Set text font size
 hist-slider-gap|number|6|Set gap between slider and histogram
+update-color-on-change|boolean|true|Update histogram bar color on change **(recommended false for performance)**
 
 ## Event
 Name|Description

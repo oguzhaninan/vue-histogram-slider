@@ -120,5 +120,12 @@ export default {
   histSliderGap: {
     type: Number,
     default: 6
+  },
+  colors: {
+    type: Array
+  },
+  updateColorOnChange: {
+    type: Boolean,
+    default: true
   }
 };

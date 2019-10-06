@@ -8,6 +8,7 @@
       :prettify="prettify"
       :drag-interval="true"
       :force-edges="false"
+      :colors="['#4facfe', '#00f2fe']"
       :min="new Date(2004, 11, 24).valueOf()"
       :max="new Date(2017, 11, 24).valueOf()"
     />

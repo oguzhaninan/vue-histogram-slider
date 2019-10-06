@@ -8,13 +8,12 @@
 </template>
 
 <script>
-import "./range-slider";
+import IonRangeSlider from "./range-slider";
 import props from "./props";
 import * as d3Scale from "d3-scale";
 import * as d3Array from "d3-array";
 import * as d3Select from "d3-selection";
 import * as d3Trans from "d3-transition";
-import * as $ from "jquery";
 
 export default {
   name: "HistogramSlider",
@@ -65,6 +64,16 @@ export default {
     // group data for bars
     var bins = histogram(this.data);
 
+    var colors;
+    if (this.colors) {
+      colors = d3Scale
+        .scaleLinear()
+        .domain([this.min, this.max])
+        .range(this.colors);
+    } else {
+      colors = () => this.primaryColor;
+    }
+
     y.domain([0, d3Array.max(bins, d => d.length)]);
 
     var bar = hist
@@ -82,9 +91,20 @@ export default {
       .attr("rx", this.barRadius)
       .attr("width", this.barWidth)
       .attr("height", d => this.barHeight - y(d.length))
-      .attr("fill", "#0091ff");
+      .attr("fill", d => colors(d.x0));
 
-    $("#histogram-slider").ionRangeSlider({
+    const updateBarColor = val => {
+      var transition = d3Trans.transition().duration(this.transitionDuration);
+
+      d3Trans
+        .transition(transition)
+        .selectAll(".vue-histogram-slider-bar")
+        .attr("fill", d =>
+          d.x0 < val.to && d.x0 > val.from ? colors(d.x0) : this.holderColor
+        );
+    };
+
+    new IonRangeSlider("#histogram-slider", {
       skin: "round",
       min: this.min,
       max: this.max,
@@ -108,19 +128,15 @@ export default {
         this.$emit("update", val);
       },
       onFinish: val => {
+        if (!this.updateColorOnChange) {
+          updateBarColor(val);
+        }
         this.$emit("finish", val);
       },
       onChange: val => {
-        var transition = d3Trans.transition().duration(this.transitionDuration);
-
-        d3Trans
-          .transition(transition)
-          .selectAll(".vue-histogram-slider-bar")
-          .attr("fill", d =>
-            d.x0 < val.to && d.x0 > val.from
-              ? this.primaryColor
-              : this.holderColor
-          );
+        if (this.updateColorOnChange) {
+          updateBarColor(val);
+        }
         this.$emit("change", val);
       }
     });
