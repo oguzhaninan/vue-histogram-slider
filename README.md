@@ -71,6 +71,7 @@ primary-color|string|#0091ff|Primary color
 holder-color|string|#dee4ec|Holder color
 handle-color|string|#ffffff|Slider handle color
 grid-text-color|string|silver|Primary color
+transition-duration|number|100|Set duration to histogram bars
 
 ## Event
 Name|Description

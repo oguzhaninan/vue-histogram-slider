@@ -1,6 +1,6 @@
 <template>
   <div :style="style" id="vue-histogram-slider-wrapper">
-    <svg id="histogram-view"></svg>
+    <svg id="vue-histogram-view"></svg>
     <div id="slider-wrapper">
       <input type="text" id="histogram-slider" />
     </div>
@@ -8,123 +8,18 @@
 </template>
 
 <script>
-import "./lib/range-slider";
+import "./range-slider";
+import props from "./props";
 import * as d3Scale from "d3-scale";
 import * as d3Array from "d3-array";
 import * as d3Select from "d3-selection";
+import * as d3Trans from "d3-transition";
 import * as $ from "jquery";
 
 export default {
   name: "HistogramSlider",
 
-  props: {
-    min: {
-      type: Number,
-      default: 1,
-      required: true
-    },
-    max: {
-      type: Number,
-      default: 100,
-      required: true
-    },
-    data: {
-      type: Array,
-      required: true
-    },
-    block: {
-      type: Boolean,
-      default: false
-    },
-    grid: {
-      type: Boolean,
-      default: true
-    },
-    gridNum: {
-      type: Number,
-      default: 4
-    },
-    step: {
-      type: Number,
-      default: 1
-    },
-    hideMinMax: {
-      type: Boolean,
-      default: true
-    },
-    hideFromTo: {
-      type: Boolean,
-      default: false
-    },
-    toFixed: {
-      type: Boolean,
-      default: false
-    },
-    fromFixed: {
-      type: Boolean,
-      default: false
-    },
-    forceEdges: {
-      type: Boolean,
-      default: false
-    },
-    dragInterval: {
-      type: Boolean,
-      default: false
-    },
-    keyboard: {
-      type: Boolean,
-      default: true
-    },
-    type: {
-      type: String,
-      default: "double",
-      validator: function(value) {
-        return ["double", "single"].indexOf(value) !== -1;
-      }
-    },
-    width: {
-      type: Number,
-      default: 650
-    },
-    barHeight: {
-      type: Number,
-      default: 100
-    },
-    barWidth: {
-      type: Number,
-      default: 6
-    },
-    barGap: {
-      type: Number,
-      default: 5
-    },
-    barRadius: {
-      type: Number,
-      default: 4
-    },
-    prettify: Function,
-    primaryColor: {
-      type: String,
-      default: "#0091ff"
-    },
-    holderColor: {
-      type: String,
-      default: "#dee4ec"
-    },
-    handleColor: {
-      type: String,
-      default: "#ffffff"
-    },
-    gridTextColor: {
-      type: String,
-      default: "silver"
-    },
-    lineHeight: {
-      type: Number,
-      default: 6
-    }
-  },
+  props,
 
   computed: {
     style() {
@@ -154,12 +49,11 @@ export default {
 
     var histogram = d3Array
       .bin()
-      .value(d => new Date(d))
       .domain(x.domain())
       .thresholds(width / (this.barWidth + this.barGap));
 
     var svg = d3Select
-      .select("#histogram-view")
+      .select("#vue-histogram-view")
       .attr("width", width)
       .attr("height", this.barHeight);
 
@@ -171,16 +65,16 @@ export default {
     y.domain([0, d3Array.max(bins, d => d.length)]);
 
     var bar = hist
-      .selectAll(".bar")
+      .selectAll(".vue-histogram-slider-bar")
       .data(bins)
       .enter()
       .append("g")
-      .attr("class", "bar")
+      .attr("class", "vue-histogram-slider-bar")
       .attr("transform", d => `translate(${x(d.x0)}, ${y(d.length)})`);
 
     bar
       .append("rect")
-      .attr("class", "bar")
+      .attr("class", "vue-histogram-slider-bar")
       .attr("x", 1)
       .attr("rx", this.barRadius)
       .attr("width", this.barWidth)
@@ -214,8 +108,11 @@ export default {
         this.$emit("finish", val);
       },
       onChange: val => {
-        d3Select
-          .selectAll(".bar")
+        var transition = d3Trans.transition().duration(this.transitionDuration);
+
+        d3Trans
+          .transition(transition)
+          .selectAll(".vue-histogram-slider-bar")
           .attr("fill", d =>
             d.x0 < val.to && d.x0 > val.from
               ? this.primaryColor

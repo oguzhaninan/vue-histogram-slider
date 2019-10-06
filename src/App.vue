@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import HistogramSlider from "./HistogramSlider";
+import HistogramSlider from "./lib//HistogramSlider";
 export default {
   data() {
     return {
-      data: require("../resources/data.json"),
+      data: require("../resources/data.json").map(d => new Date(d)),
       prettify: function(ts) {
         return new Date(ts).toLocaleDateString("en", {
           year: "numeric",
