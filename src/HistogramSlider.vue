@@ -152,7 +152,7 @@ export default {
 
     var histogram = d3Array
       .bin()
-      .value(d => new Date(d.date))
+      .value(d => new Date(d))
       .domain(x.domain())
       .thresholds(width / (this.barWidth + this.barGap));
 

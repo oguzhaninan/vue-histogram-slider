@@ -1,6 +1,7 @@
 <template>
   <div>
     <HistogramSlider
+      style="margin: 200px auto"
       :width="900"
       :barHeight="110"
       :data="data"
