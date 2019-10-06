@@ -413,8 +413,8 @@ IonRangeSlider.prototype = {
       this.$cache.bar = this.$cache.cont.querySelector(".irs-bar");
       this.$cache.edge = this.$cache.cont.querySelector(".irs-bar-edge");
       this.$cache.s_single = this.$cache.cont.querySelector(".single");
-      this.$cache.from[0].style.visibility = "hidden";
-      this.$cache.to[0].style.visibility = "hidden";
+      this.$cache.from.style.visibility = "hidden";
+      this.$cache.to.style.visibility = "hidden";
       this.$cache.shad_single = this.$cache.cont.querySelector(".shadow-single");
     } else {
       this.$cache.cont.innerHTML += double_html;
@@ -428,9 +428,9 @@ IonRangeSlider.prototype = {
     }
 
     if (this.options.hide_from_to) {
-      this.$cache.from[0].style.display = "none";
-      this.$cache.to[0].style.display = "none";
-      this.$cache.single[0].style.display = "none";
+      this.$cache.from.style.display = "none";
+      this.$cache.to.style.display = "none";
+      this.$cache.single.style.display = "none";
     }
 
     this.appendGrid();
@@ -454,7 +454,7 @@ IonRangeSlider.prototype = {
     }
 
     if (this.options.drag_interval) {
-      this.$cache.bar[0].style.cursor = "grabbing";
+      this.$cache.bar.style.cursor = "grabbing";
     }
   },
 
@@ -544,13 +544,13 @@ IonRangeSlider.prototype = {
     this.$cache.cont.remove();
     this.$cache.cont = null;
 
-    this.$cache.line.off("keydown.irs_" + this.plugin_count);
+    this.$cache.line.removeEventListener("keydown.irs_" + this.plugin_count);
 
-    this.$cache.body.off("touchmove.irs_" + this.plugin_count);
-    this.$cache.body.off("mousemove.irs_" + this.plugin_count);
+    this.$cache.body.removeEventListener("touchmove.irs_" + this.plugin_count);
+    this.$cache.body.removeEventListener("mousemove.irs_" + this.plugin_count);
 
-    this.$cache.win.off("touchend.irs_" + this.plugin_count);
-    this.$cache.win.off("mouseup.irs_" + this.plugin_count);
+    this.$cache.win.removeEventListener("touchend.irs_" + this.plugin_count);
+    this.$cache.win.removeEventListener("mouseup.irs_" + this.plugin_count);
 
     this.$cache.grid_labels = [];
     this.coords.big = [];
@@ -569,151 +569,151 @@ IonRangeSlider.prototype = {
       return;
     }
 
-    this.$cache.body.on(
+    this.$cache.body.addEventListener(
       "touchmove.irs_" + this.plugin_count,
       this.pointerMove.bind(this)
     );
-    this.$cache.body.on(
+    this.$cache.body.addEventListener(
       "mousemove.irs_" + this.plugin_count,
       this.pointerMove.bind(this)
     );
 
-    this.$cache.win.on(
+    this.$cache.win.addEventListener(
       "touchend.irs_" + this.plugin_count,
       this.pointerUp.bind(this)
     );
-    this.$cache.win.on(
+    this.$cache.win.addEventListener(
       "mouseup.irs_" + this.plugin_count,
       this.pointerUp.bind(this)
     );
 
-    this.$cache.line.on(
+    this.$cache.line.addEventListener(
       "touchstart.irs_" + this.plugin_count,
       this.pointerClick.bind(this, "click")
     );
-    this.$cache.line.on(
+    this.$cache.line.addEventListener(
       "mousedown.irs_" + this.plugin_count,
       this.pointerClick.bind(this, "click")
     );
 
-    this.$cache.line.on(
+    this.$cache.line.addEventListener(
       "focus.irs_" + this.plugin_count,
       this.pointerFocus.bind(this)
     );
 
     if (this.options.drag_interval && this.options.type === "double") {
-      this.$cache.bar.on(
+      this.$cache.bar.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "both")
       );
-      this.$cache.bar.on(
+      this.$cache.bar.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "both")
       );
     } else {
-      this.$cache.bar.on(
+      this.$cache.bar.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
-      this.$cache.bar.on(
+      this.$cache.bar.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
     }
 
     if (this.options.type === "single") {
-      this.$cache.single.on(
+      this.$cache.single.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "single")
       );
-      this.$cache.s_single.on(
+      this.$cache.s_single.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "single")
       );
-      this.$cache.shad_single.on(
+      this.$cache.shad_single.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
 
-      this.$cache.single.on(
+      this.$cache.single.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "single")
       );
-      this.$cache.s_single.on(
+      this.$cache.s_single.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "single")
       );
-      this.$cache.edge.on(
+      this.$cache.edge.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
-      this.$cache.shad_single.on(
+      this.$cache.shad_single.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
     } else {
-      this.$cache.single.on(
+      this.$cache.single.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, null)
       );
-      this.$cache.single.on(
+      this.$cache.single.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, null)
       );
 
-      this.$cache.from.on(
+      this.$cache.from.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "from")
       );
-      this.$cache.s_from.on(
+      this.$cache.s_from.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "from")
       );
-      this.$cache.to.on(
+      this.$cache.to.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "to")
       );
-      this.$cache.s_to.on(
+      this.$cache.s_to.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "to")
       );
-      this.$cache.shad_from.on(
+      this.$cache.shad_from.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
-      this.$cache.shad_to.on(
+      this.$cache.shad_to.addEventListener(
         "touchstart.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
 
-      this.$cache.from.on(
+      this.$cache.from.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "from")
       );
-      this.$cache.s_from.on(
+      this.$cache.s_from.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "from")
       );
-      this.$cache.to.on(
+      this.$cache.to.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "to")
       );
-      this.$cache.s_to.on(
+      this.$cache.s_to.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerDown.bind(this, "to")
       );
-      this.$cache.shad_from.on(
+      this.$cache.shad_from.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
-      this.$cache.shad_to.on(
+      this.$cache.shad_to.addEventListener(
         "mousedown.irs_" + this.plugin_count,
         this.pointerClick.bind(this, "click")
       );
     }
 
     if (this.options.keyboard) {
-      this.$cache.line.on(
+      this.$cache.line.addEventListener(
         "keydown.irs_" + this.plugin_count,
         this.key.bind(this, "keyboard")
       );
@@ -791,7 +791,7 @@ IonRangeSlider.prototype = {
     this.restoreOriginalMinInterval();
 
     // callbacks call
-    if ($.contains(this.$cache.cont[0], e.target) || this.dragging) {
+    if ($.contains(this.$cache.cont, e.target) || this.dragging) {
       this.callOnFinish();
     }
 
@@ -938,8 +938,8 @@ IonRangeSlider.prototype = {
     }
 
     if (this.options.hide_min_max) {
-      this.$cache.min[0].style.display = "none";
-      this.$cache.max[0].style.display = "none";
+      this.$cache.min.style.display = "none";
+      this.$cache.max.style.display = "none";
       return;
     }
 
@@ -1503,29 +1503,29 @@ IonRangeSlider.prototype = {
     ) {
       this.drawLabels();
 
-      this.$cache.bar[0].style.left = this.coords.p_bar_x + "%";
-      this.$cache.bar[0].style.width = this.coords.p_bar_w + "%";
+      this.$cache.bar.style.left = this.coords.p_bar_x + "%";
+      this.$cache.bar.style.width = this.coords.p_bar_w + "%";
 
       if (this.options.type === "single") {
-        this.$cache.bar[0].style.left = 0;
-        this.$cache.bar[0].style.width =
+        this.$cache.bar.style.left = 0;
+        this.$cache.bar.style.width =
           this.coords.p_bar_w + this.coords.p_bar_x + "%";
 
-        this.$cache.s_single[0].style.left = this.coords.p_single_fake + "%";
+        this.$cache.s_single.style.left = this.coords.p_single_fake + "%";
 
-        this.$cache.single[0].style.left = this.labels.p_single_left + "%";
+        this.$cache.single.style.left = this.labels.p_single_left + "%";
       } else {
-        this.$cache.s_from[0].style.left = this.coords.p_from_fake + "%";
-        this.$cache.s_to[0].style.left = this.coords.p_to_fake + "%";
+        this.$cache.s_from.style.left = this.coords.p_from_fake + "%";
+        this.$cache.s_to.style.left = this.coords.p_to_fake + "%";
 
         if (this.old_from !== this.result.from || this.force_redraw) {
-          this.$cache.from[0].style.left = this.labels.p_from_left + "%";
+          this.$cache.from.style.left = this.labels.p_from_left + "%";
         }
         if (this.old_to !== this.result.to || this.force_redraw) {
-          this.$cache.to[0].style.left = this.labels.p_to_left + "%";
+          this.$cache.to.style.left = this.labels.p_to_left + "%";
         }
 
-        this.$cache.single[0].style.left = this.labels.p_single_left + "%";
+        this.$cache.single.style.left = this.labels.p_single_left + "%";
       }
 
       this.writeToInput();
@@ -1604,18 +1604,18 @@ IonRangeSlider.prototype = {
       this.calcLabels();
 
       if (this.labels.p_single_left < this.labels.p_min + 1) {
-        this.$cache.min[0].style.visibility = "hidden";
+        this.$cache.min.style.visibility = "hidden";
       } else {
-        this.$cache.min[0].style.visibility = "visible";
+        this.$cache.min.style.visibility = "visible";
       }
 
       if (
         this.labels.p_single_left + this.labels.p_single_fake >
         100 - this.labels.p_max - 1
       ) {
-        this.$cache.max[0].style.visibility = "hidden";
+        this.$cache.max.style.visibility = "hidden";
       } else {
-        this.$cache.max[0].style.visibility = "visible";
+        this.$cache.max.style.visibility = "visible";
       }
     } else {
       if (values_num) {
@@ -1669,42 +1669,42 @@ IonRangeSlider.prototype = {
         this.labels.p_from_left + this.labels.p_from_fake >=
         this.labels.p_to_left
       ) {
-        this.$cache.from[0].style.visibility = "hidden";
-        this.$cache.to[0].style.visibility = "hidden";
-        this.$cache.single[0].style.visibility = "visible";
+        this.$cache.from.style.visibility = "hidden";
+        this.$cache.to.style.visibility = "hidden";
+        this.$cache.single.style.visibility = "visible";
 
         if (this.result.from === this.result.to) {
           if (this.target === "from") {
-            this.$cache.from[0].style.visibility = "visible";
+            this.$cache.from.style.visibility = "visible";
           } else if (this.target === "to") {
-            this.$cache.to[0].style.visibility = "visible";
+            this.$cache.to.style.visibility = "visible";
           } else if (!this.target) {
-            this.$cache.from[0].style.visibility = "visible";
+            this.$cache.from.style.visibility = "visible";
           }
-          this.$cache.single[0].style.visibility = "hidden";
+          this.$cache.single.style.visibility = "hidden";
           max = to_left;
         } else {
-          this.$cache.from[0].style.visibility = "hidden";
-          this.$cache.to[0].style.visibility = "hidden";
-          this.$cache.single[0].style.visibility = "visible";
+          this.$cache.from.style.visibility = "hidden";
+          this.$cache.to.style.visibility = "hidden";
+          this.$cache.single.style.visibility = "visible";
           max = Math.max(single_left, to_left);
         }
       } else {
-        this.$cache.from[0].style.visibility = "visible";
-        this.$cache.to[0].style.visibility = "visible";
-        this.$cache.single[0].style.visibility = "hidden";
+        this.$cache.from.style.visibility = "visible";
+        this.$cache.to.style.visibility = "visible";
+        this.$cache.single.style.visibility = "hidden";
       }
 
       if (min < this.labels.p_min + 1) {
-        this.$cache.min[0].style.visibility = "hidden";
+        this.$cache.min.style.visibility = "hidden";
       } else {
-        this.$cache.min[0].style.visibility = "visible";
+        this.$cache.min.style.visibility = "visible";
       }
 
       if (max > 100 - this.labels.p_max - 1) {
-        this.$cache.max[0].style.visibility = "hidden";
+        this.$cache.max.style.visibility = "hidden";
       } else {
-        this.$cache.max[0].style.visibility = "visible";
+        this.$cache.max.style.visibility = "visible";
       }
     }
   },
@@ -1756,11 +1756,11 @@ IonRangeSlider.prototype = {
         );
         from_min = from_min + this.coords.p_handle / 2;
 
-        c.shad_from[0].style.display = "block";
-        c.shad_from[0].style.left = from_min + "%";
-        c.shad_from[0].style.width = from_max + "%";
+        c.shad_from.style.display = "block";
+        c.shad_from.style.left = from_min + "%";
+        c.shad_from.style.width = from_max + "%";
       } else {
-        c.shad_from[0].style.display = "none";
+        c.shad_from.style.display = "none";
       }
 
       if (o.to_shadow && (is_to_min || is_to_max)) {
@@ -1770,11 +1770,11 @@ IonRangeSlider.prototype = {
         to_max = this.toFixed(to_max - (this.coords.p_handle / 100) * to_max);
         to_min = to_min + this.coords.p_handle / 2;
 
-        c.shad_to[0].style.display = "block";
-        c.shad_to[0].style.left = to_min + "%";
-        c.shad_to[0].style.width = to_max + "%";
+        c.shad_to.style.display = "block";
+        c.shad_to.style.left = to_min + "%";
+        c.shad_to.style.width = to_max + "%";
       } else {
-        c.shad_to[0].style.display = "none";
+        c.shad_to.style.display = "none";
       }
     }
   },
@@ -1789,19 +1789,19 @@ IonRangeSlider.prototype = {
       } else {
         this.$cache.input.getAttribute("value") || this.result.from;
       }
-      this.$cache.input.data("from", this.result.from);
+      this.$cache.input.getAttribute("from") || this.result.from;
     } else {
       if (this.options.values.length) {
-        this.$cache.input.getAttribute("value") || thisresult.from_value +
+        this.$cache.input.getAttribute("value") || this.result.from_value +
             this.options.input_values_separator +
             this.result.to_value;
       } else {
-        this.$cache.input.getAttribute("value") || thisresult.from +
+        this.$cache.input.getAttribute("value") || this.result.from +
             this.options.input_values_separator +
             this.result.to;
       }
-      this.$cache.input.data("from", this.result.from);
-      this.$cache.input.data("to", this.result.to);
+      this.$cache.input.getAttribute("from") || this.result.from;
+      this.$cache.input.getAttribute("to") || this.result.to;
     }
   },
 
@@ -2495,7 +2495,6 @@ IonRangeSlider.prototype = {
       if (finish[i] <= start[next_i]) {
         label.style.visibility = "visible";
       } else {
-        console.log(this.$cache.grid_labels)
         label.style.visibility = "hidden";
       }
     }
@@ -2566,7 +2565,7 @@ IonRangeSlider.prototype = {
 
     this.toggleInput();
     this.$cache.input.getAttribute("readonly") || false;
-    $.data(this.input, "ionRangeSlider", null);
+    $.getAttribute(this.input,) ||"ionRangeSlider", null;
 
     this.remove();
     this.input = null;
