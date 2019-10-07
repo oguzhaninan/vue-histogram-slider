@@ -103,7 +103,7 @@ export default {
         d.x0 < val.from ? colors(d.x0) : this.holderColor;
     } else {
       getBarColor = (d, val) =>
-        d.x0 < val.to && d.x0 > val.from ? colors(d.x0) : this.holderColor;
+        d.x0 <= val.to && d.x0 >= val.from ? colors(d.x0) : this.holderColor;
     }
 
     const updateBarColor = val => {

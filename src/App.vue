@@ -2,7 +2,7 @@
   <div>
     <HistogramSlider
       style="margin: 200px auto"
-      type="single"
+      type="double"
       :width="900"
       :bar-height="110"
       :data="data"

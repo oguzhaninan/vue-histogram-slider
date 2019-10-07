@@ -1,6 +1,13 @@
-# vue-histogram-slider changelog
+# ChangeLog
+
+## v0.2.1
+
+### Bug Fix
+- First and lash histogram bar color not change problem fixed
 
 ## v0.2.0
+
+### New Features
 - `min`, `max` props are not required
 - `type` 'single' option is completed
 
