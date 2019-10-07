@@ -4,9 +4,15 @@
 <p align="center">
  Range slider with histogram for <a href="http://vuejs.org/" rel="nofollow" class="rich-diff-level-one">Vue</a>
 </p>
+<p align="center">
+    <img src="https://img.shields.io/npm/l/vue-histogram-slider?style=flat-square" />
+    <img alt="npm" src="https://img.shields.io/npm/dm/vue-histogram-slider?style=flat-square">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues/oguzhaninan/vue-histogram-slider?style=flat-square">
+    <img alt="npm" src="https://img.shields.io/npm/v/vue-histogram-slider?style=flat-square">
+</p>
 <hr>
 
-## Quick Start
+## 🚀 Quick Start
 If you are a try and learn developer, you can start trying the vue-histogram-slider now using codesandbox.io.
 
 <a href="https://codesandbox.io/s/vue-histogram-slider-b7m0e?fontsize=14" target="_blank">
@@ -18,14 +24,14 @@ If you are a try and learn developer, you can start trying the vue-histogram-sli
     <img src="https://github.com/oguzhaninan/vue-histogram-slider/raw/master/resources/histogram-slider-demo.gif">
 </p>
 
-## Installation    
+## 📦 Installation    
 ### yarn
 `yarn add vue-histogram-slider`
 
 ### npm
 `npm i vue-histogram-slider`
 
-## Usage
+## 🔧 Usage
 ```js
 import Vue from 'vue';
 import HistogramSlider from 'vue-histogram-slider';
@@ -42,10 +48,10 @@ Vue.component(HistogramSlider.name, HistogramSlider);
 />
 ```
 
-## Props
+## 📋 Props
 
 Property|Type|Default|Description
----|---|---|---
+---:|:---:|:---:|---
 min|number|1|Set slider minimum value
 max|number|100|Set slider maximum value
 data|array| - |Data for histogram
