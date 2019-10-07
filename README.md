@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/oguzhaninan/vue-histogram-slider/master/resources/header.png" width="500">
+    <img src="https://github.com/oguzhaninan/vue-histogram-slider/raw/master/resources/header.png" width="500">
 </p>
 <p align="center">
  Range slider with histogram for <a href="http://vuejs.org/" rel="nofollow" class="rich-diff-level-one">Vue</a>
