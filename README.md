@@ -44,7 +44,7 @@ Vue.component(HistogramSlider.name, HistogramSlider);
 <HistogramSlider
     :width="600"
     :bar-height="100"
-    :data="[]"
+    :data="data"
 />
 ```
 
