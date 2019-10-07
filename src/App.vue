@@ -2,6 +2,7 @@
   <div>
     <HistogramSlider
       style="margin: 200px auto"
+      type="single"
       :width="900"
       :bar-height="110"
       :data="data"
@@ -9,8 +10,6 @@
       :drag-interval="true"
       :force-edges="false"
       :colors="['#4facfe', '#00f2fe']"
-      :min="new Date(2004, 11, 24).valueOf()"
-      :max="new Date(2017, 11, 24).valueOf()"
     />
   </div>
 </template>
@@ -20,7 +19,7 @@ import HistogramSlider from "./lib//HistogramSlider";
 export default {
   data() {
     return {
-      data: require("../resources/data.json").map(d => new Date(d)),
+      data: require("../resources/data.json").map(d => new Date(d).valueOf()),
       prettify: function(ts) {
         return new Date(ts).toLocaleDateString("en", {
           year: "numeric",

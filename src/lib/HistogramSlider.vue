@@ -39,11 +39,14 @@ export default {
 
   mounted() {
     const width = this.width - 20;
+    const min = this.min || d3Array.min(this.data);
+    const max = this.max || d3Array.max(this.data);
+    const isTypeSingle = this.type == "single";
 
     // x scale for time
     var x = d3Scale
       .scaleTime()
-      .domain([this.min, this.max])
+      .domain([min, max])
       .range([0, width])
       .clamp(true);
 
@@ -69,7 +72,7 @@ export default {
     if (this.colors) {
       colors = d3Scale
         .scaleLinear()
-        .domain([this.min, this.max])
+        .domain([min, max])
         .range(this.colors);
     } else {
       colors = () => this.primaryColor;
@@ -92,7 +95,16 @@ export default {
       .attr("rx", this.barRadius)
       .attr("width", this.barWidth)
       .attr("height", d => this.barHeight - y(d.length))
-      .attr("fill", d => colors(d.x0));
+      .attr("fill", d => (isTypeSingle ? this.holderColor : colors(d.x0)));
+
+    let getBarColor;
+    if (isTypeSingle) {
+      getBarColor = (d, val) =>
+        d.x0 < val.from ? colors(d.x0) : this.holderColor;
+    } else {
+      getBarColor = (d, val) =>
+        d.x0 < val.to && d.x0 > val.from ? colors(d.x0) : this.holderColor;
+    }
 
     const updateBarColor = val => {
       var transition = d3Trans.transition().duration(this.transitionDuration);
@@ -100,15 +112,13 @@ export default {
       d3Trans
         .transition(transition)
         .selectAll(".vue-histogram-slider-bar")
-        .attr("fill", d =>
-          d.x0 < val.to && d.x0 > val.from ? colors(d.x0) : this.holderColor
-        );
+        .attr("fill", d => getBarColor(d, val));
     };
 
     new IonRangeSlider("#histogram-slider", {
       skin: "round",
-      min: this.min,
-      max: this.max,
+      min: min,
+      max: max,
       type: this.type,
       grid: this.grid,
       step: this.step,

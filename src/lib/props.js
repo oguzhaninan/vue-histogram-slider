@@ -1,17 +1,13 @@
 export default {
-  min: {
-    type: Number,
-    default: 1,
-    required: true
-  },
-  max: {
-    type: Number,
-    default: 100,
-    required: true
-  },
   data: {
     type: Array,
     required: true
+  },
+  min: {
+    type: Number
+  },
+  max: {
+    type: Number
   },
   block: {
     type: Boolean,

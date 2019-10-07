@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as $ from "jquery";
+import * as jQ from "jquery";
 
 // =================================================================================================================
 // Template
@@ -38,7 +38,7 @@ var disable_html = '<span class="irs-disable-mask"></span>';
  * @constructor
  */
 var IonRangeSlider = function(element, options) {
-  this.input = $(element);
+  this.input = jQ(element);
   this.plugin_count = Math.random().toString(36).substr(2);
   this.current_plugin = 0;
   this.calc_count = 0;
@@ -63,9 +63,9 @@ var IonRangeSlider = function(element, options) {
 
   // cache for links to all DOM elements
   this.$cache = {
-    win: $(window),
-    body: $(document.body),
-    input: $(element),
+    win: jQ(window),
+    body: jQ(document.body),
+    input: jQ(element),
     cont: null,
     rs: null,
     min: null,
@@ -316,10 +316,10 @@ var IonRangeSlider = function(element, options) {
   }
 
   // js config extends default config
-  $.extend(config, options);
+  jQ.extend(config, options);
 
   // data config extends config
-  $.extend(config, config_from_data);
+  jQ.extend(config, config_from_data);
   this.options = config;
 
   // validate config, to be sure that all data types are correct
@@ -789,7 +789,7 @@ IonRangeSlider.prototype = {
     this.restoreOriginalMinInterval();
 
     // callbacks call
-    if ($.contains(this.$cache.cont[0], e.target) || this.dragging) {
+    if (jQ.contains(this.$cache.cont[0], e.target) || this.dragging) {
       this.callOnFinish();
     }
 
@@ -2548,7 +2548,7 @@ IonRangeSlider.prototype = {
     this.update_check.from = this.result.from;
     this.update_check.to = this.result.to;
 
-    this.options = $.extend(this.options, options);
+    this.options = jQ.extend(this.options, options);
     this.validate();
     this.updateResult(options);
 
@@ -2573,7 +2573,7 @@ IonRangeSlider.prototype = {
 
     this.toggleInput();
     this.$cache.input.prop("readonly", false);
-    $.data(this.input, "ionRangeSlider", null);
+    jQ.data(this.input, "ionRangeSlider", null);
 
     this.remove();
     this.input = null;
