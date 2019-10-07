@@ -50,40 +50,40 @@ Vue.component(HistogramSlider.name, HistogramSlider);
 
 ## 📋 Props
 
-Property|Type|Default|Description
----:|:---:|:---:|---
+Property |Type|Default|Description
+---|:---:|:---:|---
 min|number|1|Set slider minimum value
 max|number|100|Set slider maximum value
 data|array| - |Data for histogram
 block|boolean|false|Locks slider and makes it inactive
 grid|boolean|true|Enables grid of values.
-grid-num|number|4|Number of grid units.
+gridNum|number|4|Number of grid units.
 step|number|1|Set sliders step. Always > 0. Could be fractional.
-hide-min-max|boolean|true|Hides min and max labels
-hide-from-to|boolean|false|Hides from and to labels
-to-fixed|boolean|false|Fix position of right handle.
-from-fixed|boolean|false|Fix position of left (or single) handle.
-force-edges|boolean|false|Slider will be always inside it's container.
-drag-interval|boolean|false|Allow user to drag whole range. Only in double type
+hideMinMax|boolean|true|Hides min and max labels
+hideFromTo|boolean|false|Hides from and to labels
+toFixed|boolean|false|Fix position of right handle.
+fromFixed|boolean|false|Fix position of left (or single) handle.
+forceEdges|boolean|false|Slider will be always inside it's container.
+dragInterval|boolean|false|Allow user to drag whole range. Only in double type
 keyboard|boolean|true|Activates keyboard controls. Move left: ←, ↓, A, S. Move right: →, ↑, W, D.
 type|string|double|Choose slider type, could be single - for one handle, or double for two handles
 width|number|600|width of dialog
-bar-height|number|100|Set max histogram bar height
-bar-width|number|6|Set histogram bar width
-bar-gap|number|5|Set histogram bar gap
-bar-radius|number|4|Set histogram bar radius
+barHeight|number|100|Set max histogram bar height
+barWidth|number|6|Set histogram bar width
+barGap|number|5|Set histogram bar gap
+barRadius|number|4|Set histogram bar radius
 prettify|function|null|Set up your own prettify function. Can be anything. For example, you can set up unix time as slider values and than transform them to cool looking dates.
-line-height|number|6|Set slider line height
-transition-duration|number|100|Set duration to histogram bars
-primary-color|string|#0091ff|Primary color
-label-color|string|#0091ff|Label color
-holder-color|string|#dee4ec|Holder color
-handle-color|string|#ffffff|Slider handle color
-grid-text-color|string|silver|Primary color
-font-family|string|'Arial, sans-serif'|Set text font family
-font-size|number|12|Set text font size
-hist-slider-gap|number|6|Set gap between slider and histogram
-update-color-on-change|boolean|true|Update histogram bar color on change **(recommended false for performance)**
+lineHeight|number|6|Set slider line height
+transitionDuration|number|100|Set duration to histogram bars
+primaryColor|string|#0091ff|Primary color
+labelColor|string|#0091ff|Label color
+holderColor|string|#dee4ec|Holder color
+handleColor|string|#ffffff|Slider handle color
+gridTextColor|string|silver|Primary color
+fontFamily|string|'Arial, sans-serif'|Set text font family
+fontSize|number|12|Set text font size
+histSliderGap|number|6|Set gap between slider and histogram
+updateColorOnChange|boolean|true|Update histogram bar color on change **(recommended false for performance)**
 
 ## Event
 Name|Description
