@@ -15,6 +15,8 @@ import * as d3Array from "d3-array";
 import * as d3Select from "d3-selection";
 import * as d3Trans from "d3-transition";
 
+var histSlider = null;
+
 export default {
   name: "HistogramSlider",
 
@@ -34,6 +36,12 @@ export default {
         --font-size: ${this.fontSize};
         --hist-slider-gap: ${-36 + this.histSliderGap}px;
       `;
+    }
+  },
+
+  methods: {
+    update(pos) {
+      histSlider.update(pos);
     }
   },
 
@@ -115,10 +123,12 @@ export default {
         .attr("fill", d => getBarColor(d, val));
     };
 
-    new IonRangeSlider("#histogram-slider", {
+    histSlider = new IonRangeSlider("#histogram-slider", {
       skin: "round",
       min: min,
       max: max,
+      from: min,
+      to: max,
       type: this.type,
       grid: this.grid,
       step: this.step,
@@ -151,6 +161,10 @@ export default {
         this.$emit("change", val);
       }
     });
+  },
+
+  destroyed() {
+    histSlider.destroy();
   }
 };
 </script>

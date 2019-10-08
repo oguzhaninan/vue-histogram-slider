@@ -30,12 +30,6 @@ export default {
     };
   },
 
-  methods: {
-    onChange(val) {
-      console.log(val);
-    }
-  },
-
   components: {
     HistogramSlider
   }
