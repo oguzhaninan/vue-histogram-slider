@@ -1,7 +1,7 @@
 {
   "name": "vue-histogram-slider",
   "description": "Range slider with histogram for vue.js",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "main": "dist/histogram-slider.umd.min.js",
   "license": "GPL-3.0",
   "repository": {
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "d3-array": "^2.3.2",
+    "d3-brush": "^1.1.3",
     "d3-scale": "^3.1.0",
     "d3-selection": "^1.4.0",
     "d3-transition": "^1.2.0",

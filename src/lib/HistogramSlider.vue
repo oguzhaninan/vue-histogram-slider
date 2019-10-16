@@ -1,6 +1,12 @@
 <template>
   <div :style="style" id="vue-histogram-slider-wrapper">
-    <svg id="vue-histogram-view"></svg>
+    <svg id="vue-histogram-view">
+      <defs>
+        <clipPath id="clip">
+          <rect :width="width" height="150" x="0" y="0" />
+        </clipPath>
+      </defs>
+    </svg>
     <div id="slider-wrapper">
       <input type="text" id="histogram-slider" />
     </div>
@@ -14,6 +20,7 @@ import * as d3Scale from "d3-scale";
 import * as d3Array from "d3-array";
 import * as d3Select from "d3-selection";
 import * as d3Trans from "d3-transition";
+import * as d3Brush from "d3-brush";
 
 var histSlider = null;
 
@@ -40,8 +47,8 @@ export default {
   },
 
   methods: {
-    update(pos) {
-      histSlider.update(pos);
+    update({ from, to }) {
+      histSlider.update({ from, to });
     }
   },
 
@@ -50,60 +57,6 @@ export default {
     const min = this.min || d3Array.min(this.data);
     const max = this.max || d3Array.max(this.data);
     const isTypeSingle = this.type == "single";
-
-    // x scale for time
-    var x = d3Scale
-      .scaleTime()
-      .domain([min, max])
-      .range([0, width])
-      .clamp(true);
-
-    // y scale for histogram
-    var y = d3Scale.scaleLinear().range([this.barHeight, 0]);
-
-    var histogram = d3Array
-      .bin()
-      .domain(x.domain())
-      .thresholds(width / (this.barWidth + this.barGap));
-
-    var svg = d3Select
-      .select("#vue-histogram-view")
-      .attr("width", width)
-      .attr("height", this.barHeight);
-
-    var hist = svg.append("g").attr("class", "histogram");
-
-    // group data for bars
-    var bins = histogram(this.data);
-
-    var colors;
-    if (this.colors) {
-      colors = d3Scale
-        .scaleLinear()
-        .domain([min, max])
-        .range(this.colors);
-    } else {
-      colors = () => this.primaryColor;
-    }
-
-    y.domain([0, d3Array.max(bins, d => d.length)]);
-
-    var bar = hist
-      .selectAll(".vue-histogram-slider-bar")
-      .data(bins)
-      .enter()
-      .append("g")
-      .attr("class", "vue-histogram-slider-bar")
-      .attr("transform", d => `translate(${x(d.x0)}, ${y(d.length)})`);
-
-    bar
-      .append("rect")
-      .attr("class", "vue-histogram-slider-bar")
-      .attr("x", 1)
-      .attr("rx", this.barRadius)
-      .attr("width", this.barWidth)
-      .attr("height", d => this.barHeight - y(d.length))
-      .attr("fill", d => (isTypeSingle ? this.holderColor : colors(d.x0)));
 
     let getBarColor;
     if (isTypeSingle) {
@@ -123,44 +76,125 @@ export default {
         .attr("fill", d => getBarColor(d, val));
     };
 
-    histSlider = new IonRangeSlider("#histogram-slider", {
-      skin: "round",
-      min: min,
-      max: max,
-      from: min,
-      to: max,
-      type: this.type,
-      grid: this.grid,
-      step: this.step,
-      from_fixed: this.fromFixed,
-      to_fixed: this.toFixed,
-      hide_min_max: this.hideMinMax,
-      hide_from_to: this.hideFromTo,
-      force_edges: this.forceEdges,
-      drag_interval: this.dragInterval,
-      grid_num: this.Number,
-      block: this.block,
-      keyboard: this.keyboard,
-      prettify: this.prettify,
-      onStart: val => {
-        this.$emit("start", val);
-      },
-      onUpdate: val => {
-        this.$emit("update", val);
-      },
-      onFinish: val => {
-        if (!this.updateColorOnChange) {
-          updateBarColor(val);
+    // x scale for time
+    console.log([min, max], "---");
+    var x = d3Scale
+      .scaleLinear()
+      .domain([min, max])
+      .range([0, width])
+      .clamp(true);
+
+    // y scale for histogram
+    var y = d3Scale.scaleLinear().range([this.barHeight, 0]);
+
+    var histogram = d3Array
+      .bin()
+      .domain(x.domain())
+      .thresholds(width / (this.barWidth + this.barGap));
+
+    var svg = d3Select
+      .select("#vue-histogram-view")
+      .attr("width", width)
+      .attr("height", this.barHeight)
+      .on("dblclick", () => {
+        x.domain([min, max]);
+        updateHistogram([min, max]);
+        this.update({ from: min, to: max });
+      });
+
+    var hist = svg
+      .append("g")
+      .attr("clip-path", "url(#clip)")
+      .attr("class", "histogram");
+
+    // group data for bars
+    var bins = histogram(this.data);
+
+    var colors;
+    if (this.colors) {
+      colors = d3Scale
+        .scaleLinear()
+        .domain([min, max])
+        .range(this.colors);
+    } else {
+      colors = () => this.primaryColor;
+    }
+
+    y.domain([0, d3Array.max(bins, d => d.length)]);
+
+    const updateHistogram = ([min, max]) => {
+      hist.selectAll(".vue-histogram-slider-bar").remove();
+
+      hist
+        .selectAll(".vue-histogram-slider-bar")
+        .data(bins)
+        .enter()
+        .insert("rect", "rect.overlay")
+        .attr("class", "vue-histogram-slider-bar")
+        .attr("x", d => x(d.x0))
+        .attr("y", d => y(d.length))
+        .attr("rx", this.barRadius)
+        .attr("width", this.barWidth)
+        .attr("height", d => this.barHeight - y(d.length))
+        .attr("fill", d => (isTypeSingle ? this.holderColor : colors(d.x0)));
+
+      if (histSlider) {
+        histSlider.destroy();
+      }
+
+      histSlider = new IonRangeSlider("#histogram-slider", {
+        skin: "round",
+        min: min,
+        max: max,
+        from: min,
+        to: max,
+        type: this.type,
+        grid: this.grid,
+        step: this.step,
+        from_fixed: this.fromFixed,
+        to_fixed: this.toFixed,
+        hide_min_max: this.hideMinMax,
+        hide_from_to: this.hideFromTo,
+        force_edges: this.forceEdges,
+        drag_interval: this.dragInterval,
+        grid_num: this.Number,
+        block: this.block,
+        keyboard: this.keyboard,
+        prettify: this.prettify,
+        onStart: val => {
+          this.$emit("start", val);
+        },
+        onUpdate: val => {
+          this.$emit("update", val);
+        },
+        onFinish: val => {
+          if (!this.updateColorOnChange) {
+            updateBarColor(val);
+          }
+          this.$emit("finish", val);
+        },
+        onChange: val => {
+          if (this.updateColorOnChange) {
+            updateBarColor(val);
+          }
+          this.$emit("change", val);
         }
-        this.$emit("finish", val);
-      },
-      onChange: val => {
-        if (this.updateColorOnChange) {
-          updateBarColor(val);
-        }
-        this.$emit("change", val);
+      });
+    };
+
+    var brush = d3Brush.brushX("a").on("end", () => {
+      var extent = d3Select.event.selection;
+      if (extent) {
+        var domain = [x.invert(extent[0]), x.invert(extent[1])];
+        x.domain(domain);
+        updateHistogram(domain);
+        hist.call(brush.clear);
       }
     });
+
+    hist.call(brush);
+
+    updateHistogram([min, max]);
   },
 
   destroyed() {
@@ -179,6 +213,10 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+
+.vue-histogram-slider-bar {
+  pointer-events: none;
 }
 
 .irs {
