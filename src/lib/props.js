@@ -9,6 +9,10 @@ export default {
   max: {
     type: Number
   },
+  clip: {
+    type: Boolean,
+    default: true
+  },
   block: {
     type: Boolean,
     default: false

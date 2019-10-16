@@ -3,7 +3,7 @@
     <svg id="vue-histogram-view">
       <defs>
         <clipPath id="clip">
-          <rect :width="width" height="150" x="0" y="0" />
+          <rect :width="width" :height="barHeight" x="0" y="0" />
         </clipPath>
       </defs>
     </svg>
@@ -57,7 +57,7 @@ export default {
     const min = this.min || d3Array.min(this.data);
     const max = this.max || d3Array.max(this.data);
     const isTypeSingle = this.type == "single";
-    var svg, histogram, x, y, hist, bins, colors;
+    var svg, histogram, x, y, hist, bins, colors, brush;
 
     const updateBarColor = val => {
       var transition = d3Trans.transition().duration(this.transitionDuration);
@@ -91,15 +91,18 @@ export default {
       .attr("width", width)
       .attr("height", this.barHeight)
       .on("dblclick", () => {
-        x.domain([min, max]);
-        updateHistogram([min, max]);
-        this.update({ from: min, to: max });
+        if (this.clip) {
+          x.domain([min, max]);
+          updateHistogram([min, max]);
+          this.update({ from: min, to: max });
+        }
       });
 
-    hist = svg
-      .append("g")
-      .attr("clip-path", "url(#clip)")
-      .attr("class", "histogram");
+    hist = svg.append("g").attr("class", "histogram");
+
+    if (this.clip) {
+      hist.attr("clip-path", "url(#clip)");
+    }
 
     if (this.colors) {
       colors = d3Scale
@@ -182,24 +185,26 @@ export default {
         }
       });
 
-      setTimeout(() => {
-        updateBarColor(histSlider.result);
-      }, this.transitionDuration + 10);
+      setTimeout(
+        () => updateBarColor(histSlider.result),
+        this.transitionDuration
+      );
     };
 
-    var brush = d3Brush.brushX("a").on("end", () => {
-      var extent = d3Select.event.selection;
-      if (extent) {
-        var domain = [x.invert(extent[0]), x.invert(extent[1])];
-        x.domain(domain);
-        updateHistogram(domain);
-        hist.call(brush.clear);
-      }
-    });
+    if (this.clip) {
+      brush = d3Brush.brushX().on("end", () => {
+        var extent = d3Select.event.selection;
+        if (extent) {
+          var domain = [x.invert(extent[0]), x.invert(extent[1])];
+          x.domain(domain);
+          updateHistogram(domain);
+          hist.call(brush.clear);
+        }
+      });
+      hist.call(brush);
+    }
 
     updateHistogram([min, max]);
-
-    hist.call(brush);
   },
 
   destroyed() {
@@ -209,6 +214,10 @@ export default {
 </script>
 
 <style>
+#vue-histogram-view {
+  z-index: 9;
+}
+
 #slider-wrapper {
   width: 100%;
   margin-top: var(--hist-slider-gap);
@@ -296,6 +305,7 @@ export default {
   left: 0;
   cursor: default;
   white-space: nowrap;
+  z-index: 99;
 }
 
 .irs-grid {
