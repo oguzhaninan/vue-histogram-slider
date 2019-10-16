@@ -57,15 +57,7 @@ export default {
     const min = this.min || d3Array.min(this.data);
     const max = this.max || d3Array.max(this.data);
     const isTypeSingle = this.type == "single";
-
-    let getBarColor;
-    if (isTypeSingle) {
-      getBarColor = (d, val) =>
-        d.x0 < val.from ? colors(d.x0) : this.holderColor;
-    } else {
-      getBarColor = (d, val) =>
-        d.x0 <= val.to && d.x0 >= val.from ? colors(d.x0) : this.holderColor;
-    }
+    var svg, histogram, x, y, hist, bins, colors;
 
     const updateBarColor = val => {
       var transition = d3Trans.transition().duration(this.transitionDuration);
@@ -73,26 +65,28 @@ export default {
       d3Trans
         .transition(transition)
         .selectAll(".vue-histogram-slider-bar")
-        .attr("fill", d => getBarColor(d, val));
+        .attr("fill", d => {
+          if (isTypeSingle) {
+            return d.x0 < val.from ? colors(d.x0) : this.holderColor;
+          } else {
+            return d.x0 <= val.to && d.x0 >= val.from
+              ? colors(d.x0)
+              : this.holderColor;
+          }
+        });
     };
 
     // x scale for time
-    console.log([min, max], "---");
-    var x = d3Scale
+    x = d3Scale
       .scaleLinear()
       .domain([min, max])
       .range([0, width])
       .clamp(true);
 
     // y scale for histogram
-    var y = d3Scale.scaleLinear().range([this.barHeight, 0]);
+    y = d3Scale.scaleLinear().range([this.barHeight, 0]);
 
-    var histogram = d3Array
-      .bin()
-      .domain(x.domain())
-      .thresholds(width / (this.barWidth + this.barGap));
-
-    var svg = d3Select
+    svg = d3Select
       .select("#vue-histogram-view")
       .attr("width", width)
       .attr("height", this.barHeight)
@@ -102,15 +96,11 @@ export default {
         this.update({ from: min, to: max });
       });
 
-    var hist = svg
+    hist = svg
       .append("g")
       .attr("clip-path", "url(#clip)")
       .attr("class", "histogram");
 
-    // group data for bars
-    var bins = histogram(this.data);
-
-    var colors;
     if (this.colors) {
       colors = d3Scale
         .scaleLinear()
@@ -120,10 +110,20 @@ export default {
       colors = () => this.primaryColor;
     }
 
-    y.domain([0, d3Array.max(bins, d => d.length)]);
-
     const updateHistogram = ([min, max]) => {
+      let transition = d3Trans.transition().duration(this.transitionDuration);
+
       hist.selectAll(".vue-histogram-slider-bar").remove();
+
+      histogram = d3Array
+        .bin()
+        .domain(x.domain())
+        .thresholds(width / (this.barWidth + this.barGap));
+
+      // group data for bars
+      bins = histogram(this.data);
+
+      y.domain([0, d3Array.max(bins, d => d.length)]);
 
       hist
         .selectAll(".vue-histogram-slider-bar")
@@ -135,6 +135,7 @@ export default {
         .attr("y", d => y(d.length))
         .attr("rx", this.barRadius)
         .attr("width", this.barWidth)
+        .transition(transition)
         .attr("height", d => this.barHeight - y(d.length))
         .attr("fill", d => (isTypeSingle ? this.holderColor : colors(d.x0)));
 
@@ -180,6 +181,10 @@ export default {
           this.$emit("change", val);
         }
       });
+
+      setTimeout(() => {
+        updateBarColor(histSlider.result);
+      }, this.transitionDuration + 10);
     };
 
     var brush = d3Brush.brushX("a").on("end", () => {
@@ -192,9 +197,9 @@ export default {
       }
     });
 
-    hist.call(brush);
-
     updateHistogram([min, max]);
+
+    hist.call(brush);
   },
 
   destroyed() {
