@@ -1,5 +1,10 @@
 # ChangeLog
 
+## v0.3.0
+
+### New Features
+- Add histogram clip
+
 ## v0.2.1
 
 ### Bug Fix
