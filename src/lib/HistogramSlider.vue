@@ -93,7 +93,7 @@ export default {
       .on("dblclick", () => {
         if (this.clip) {
           x.domain([min, max]);
-          updateHistogram([min, max]);
+          updateHistogram([min, max], { from: min, to: max });
           this.update({ from: min, to: max });
         }
       });
@@ -113,7 +113,7 @@ export default {
       colors = () => this.primaryColor;
     }
 
-    const updateHistogram = ([min, max]) => {
+    const updateHistogram = ([min, max], pos) => {
       let transition = d3Trans.transition().duration(this.transitionDuration);
 
       hist.selectAll(".vue-histogram-slider-bar").remove();
@@ -185,10 +185,7 @@ export default {
         }
       });
 
-      setTimeout(
-        () => updateBarColor(histSlider.result),
-        this.transitionDuration
-      );
+      setTimeout(() => updateBarColor(pos), this.transitionDuration);
     };
 
     if (this.clip) {
@@ -197,14 +194,30 @@ export default {
         if (extent) {
           var domain = [x.invert(extent[0]), x.invert(extent[1])];
           x.domain(domain);
-          updateHistogram(domain);
+          const pos = {
+            form:
+              domain[0] > histSlider.result.from
+                ? domain[0]
+                : histSlider.result.from,
+            to:
+              domain[1] < histSlider.result.to
+                ? domain[1]
+                : histSlider.result.to
+          };
+          console.log(histSlider.result.from, histSlider.result.to);
+          console.log(domain);
+          console.log(pos);
+          this.$emit("finish", pos);
+          this.$emit("change", pos);
+
+          updateHistogram(domain, pos);
           hist.call(brush.clear);
         }
       });
       hist.call(brush);
     }
 
-    updateHistogram([min, max]);
+    updateHistogram([min, max], { form: min, to: max });
   },
 
   destroyed() {
