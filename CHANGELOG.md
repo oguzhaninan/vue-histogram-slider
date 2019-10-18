@@ -1,5 +1,10 @@
 # ChangeLog
 
+## v0.3.2
+
+### Bug Fix
+- Performance improvements
+
 ## v0.3.1
 
 ### Bug Fix
