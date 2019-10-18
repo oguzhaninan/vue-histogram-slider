@@ -1,5 +1,10 @@
 # ChangeLog
 
+## v0.3.3
+
+### Bug Fix
+- Fixed hist color issue
+
 ## v0.3.2
 
 ### Bug Fix

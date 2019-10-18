@@ -7,7 +7,7 @@
       :bar-height="110"
       :data="data"
       :prettify="prettify"
-      :clip="false"
+      :clip="true"
       :drag-interval="true"
       :force-edges="false"
       :colors="['#4facfe', '#00f2fe']"

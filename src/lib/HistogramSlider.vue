@@ -93,7 +93,7 @@ export default {
       .on("dblclick", () => {
         if (this.clip) {
           x.domain([min, max]);
-          updateHistogram([min, max], { from: min, to: max });
+          updateHistogram([min, max]);
           this.update({ from: min, to: max });
         }
       });
@@ -113,7 +113,7 @@ export default {
       colors = () => this.primaryColor;
     }
 
-    const updateHistogram = ([min, max], pos) => {
+    const updateHistogram = ([min, max]) => {
       let transition = d3Trans.transition().duration(this.transitionDuration);
 
       hist.selectAll(".vue-histogram-slider-bar").remove();
@@ -185,7 +185,10 @@ export default {
         }
       });
 
-      setTimeout(() => updateBarColor(pos), this.transitionDuration);
+      setTimeout(
+        () => updateBarColor(histSlider.result),
+        this.transitionDuration + 10
+      );
     };
 
     if (this.clip) {
@@ -194,30 +197,21 @@ export default {
         if (extent) {
           var domain = [x.invert(extent[0]), x.invert(extent[1])];
           x.domain(domain);
-          const pos = {
-            form:
-              domain[0] > histSlider.result.from
-                ? domain[0]
-                : histSlider.result.from,
-            to:
-              domain[1] < histSlider.result.to
-                ? domain[1]
-                : histSlider.result.to
-          };
-          console.log(histSlider.result.from, histSlider.result.to);
-          console.log(domain);
-          console.log(pos);
-          this.$emit("finish", pos);
-          this.$emit("change", pos);
+          // const pos = {
+          //   form: Math.max(domain[0], histSlider.result.from),
+          //   to: Math.min(domain[1], histSlider.result.to)
+          // };
+          this.$emit("finish", histSlider.result);
+          this.$emit("change", histSlider.result);
 
-          updateHistogram(domain, pos);
+          updateHistogram(domain);
           hist.call(brush.clear);
         }
       });
       hist.call(brush);
     }
 
-    updateHistogram([min, max], { form: min, to: max });
+    updateHistogram([min, max]);
   },
 
   destroyed() {
