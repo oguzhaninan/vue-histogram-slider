@@ -94,7 +94,10 @@ export default {
         if (this.clip) {
           x.domain([min, max]);
           updateHistogram([min, max]);
-          this.update({ from: min, to: max });
+          const pos = { from: min, to: max };
+          this.update(pos);
+          this.$emit("finish", pos);
+          this.$emit("change", pos);
         }
       });
 
@@ -197,12 +200,12 @@ export default {
         if (extent) {
           var domain = [x.invert(extent[0]), x.invert(extent[1])];
           x.domain(domain);
-          // const pos = {
-          //   form: Math.max(domain[0], histSlider.result.from),
-          //   to: Math.min(domain[1], histSlider.result.to)
-          // };
-          this.$emit("finish", histSlider.result);
-          this.$emit("change", histSlider.result);
+          const pos = {
+            form: Math.max(domain[0], histSlider.result.from),
+            to: Math.min(domain[1], histSlider.result.to)
+          };
+          this.$emit("finish", pos);
+          this.$emit("change", pos);
 
           updateHistogram(domain);
           hist.call(brush.clear);

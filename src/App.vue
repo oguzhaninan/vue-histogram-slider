@@ -9,6 +9,7 @@
       :prettify="prettify"
       :clip="true"
       :drag-interval="true"
+      @finish="finish"
       :force-edges="false"
       :colors="['#4facfe', '#00f2fe']"
     />
@@ -29,6 +30,12 @@ export default {
         });
       }
     };
+  },
+
+  methods: {
+    finish(val) {
+      console.log(val);
+    }
   },
 
   components: {
