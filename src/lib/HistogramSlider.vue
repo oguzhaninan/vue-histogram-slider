@@ -42,6 +42,7 @@ export default {
         --font-family: ${this.fontFamily};
         --font-size: ${this.fontSize};
         --hist-slider-gap: ${-36 + this.histSliderGap}px;
+        --handle-size: ${this.handleSize}px;
       `;
     }
   },
@@ -430,12 +431,12 @@ export default {
 
 .irs--round .irs-handle {
   cursor: pointer;
-  top: 30px;
-  width: 16px;
-  height: 16px;
-  /* border: 4px solid #006cfa; */
+  top: calc(50% - var(--handle-size) / 2 + 5px);
+  width: var(--handle-size);
+  height: var(--handle-size);
   background-color: var(--handle-color);
-  border-radius: 18px;
+  z-index: 9;
+  border-radius: 50%;
   box-shadow: 0 1px 3px rgba(0, 0, 255, 0.3);
 }
 

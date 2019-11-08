@@ -131,5 +131,9 @@ export default {
   updateColorOnChange: {
     type: Boolean,
     default: true
+  },
+  handleSize: {
+    type: Number,
+    default: 26
   }
 };

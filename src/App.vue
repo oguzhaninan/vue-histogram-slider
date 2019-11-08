@@ -9,6 +9,7 @@
       :prettify="prettify"
       :clip="true"
       :drag-interval="true"
+      :hideFromTo="true"
       @finish="finish"
       :force-edges="false"
       :colors="['#4facfe', '#00f2fe']"

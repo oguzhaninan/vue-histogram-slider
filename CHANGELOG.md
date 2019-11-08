@@ -1,5 +1,10 @@
 # ChangeLog
 
+## v0.3.5
+
+### New Features
+- Added handle size prop
+
 ## v0.3.3
 
 ### Bug Fix

@@ -82,10 +82,11 @@ handleColor|string|#ffffff|Slider handle color
 gridTextColor|string|silver|Primary color
 fontFamily|string|'Arial, sans-serif'|Set text font family
 fontSize|number|12|Set text font size
+handleSize|number|26|Slider handle size
 histSliderGap|number|6|Set gap between slider and histogram
 updateColorOnChange|boolean|true|Update histogram bar color on change **(recommended false for performance)**
 
-## Event
+## 🔧 Event
 Name|Description
 ---|---
 start |Triggers when slider start.
