@@ -202,7 +202,7 @@ export default {
           var domain = [x.invert(extent[0]), x.invert(extent[1])];
           x.domain(domain);
           const pos = {
-            form: Math.max(domain[0], histSlider.result.from),
+            from: Math.max(domain[0], histSlider.result.from),
             to: Math.min(domain[1], histSlider.result.to)
           };
           this.$emit("finish", pos);
