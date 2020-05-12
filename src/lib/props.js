@@ -59,9 +59,9 @@ export default {
   },
   type: {
     type: String,
-    default: "double",
+    default: 'double',
     validator: function(value) {
-      return ["double", "single"].indexOf(value) !== -1;
+      return ['double', 'single'].indexOf(value) !== -1
     }
   },
   width: {
@@ -87,23 +87,23 @@ export default {
   prettify: Function,
   labelColor: {
     type: String,
-    default: "#0091ff"
+    default: '#0091ff'
   },
   primaryColor: {
     type: String,
-    default: "#0091ff"
+    default: '#0091ff'
   },
   holderColor: {
     type: String,
-    default: "#dee4ec"
+    default: '#dee4ec'
   },
   handleColor: {
     type: String,
-    default: "#ffffff"
+    default: '#ffffff'
   },
   gridTextColor: {
     type: String,
-    default: "silver"
+    default: 'silver'
   },
   lineHeight: {
     type: Number,
@@ -111,11 +111,11 @@ export default {
   },
   transitionDuration: {
     type: Number,
-    default: 100
+    default: 80
   },
   fontFamily: {
     type: String,
-    default: "Arial, sans-serif"
+    default: 'Arial, sans-serif'
   },
   fontSize: {
     type: Number,
@@ -136,4 +136,4 @@ export default {
     type: Number,
     default: 26
   }
-};
+}
