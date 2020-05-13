@@ -57,7 +57,7 @@ export default {
 
   mounted() {
     setTimeout(() => {
-      this.$refs.hist.update({ from: this.data[20] })
+      this.$refs.hist.update({ from: this.data[20], to: this.data[69] })
     }, 2000)
   },
 

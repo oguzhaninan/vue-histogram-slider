@@ -59,8 +59,10 @@ export default {
 
   methods: {
     update({ from, to }) {
-      this.ionRangeSlider.update({ from, to })
-      this.updateBarColor(this.ionRangeSlider.result)
+      if (this.ionRangeSlider) {
+        this.ionRangeSlider.update({ from, to })
+        this.updateBarColor({ from, to })
+      }
     }
   },
 
