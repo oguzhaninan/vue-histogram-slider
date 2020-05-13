@@ -59,7 +59,8 @@ export default {
 
   methods: {
     update({ from, to }) {
-      this.histSlider.update({ from, to })
+      this.ionRangeSlider.update({ from, to })
+      this.updateBarColor(this.ionRangeSlider.result)
     }
   },
 
@@ -70,7 +71,7 @@ export default {
     const isTypeSingle = this.type == 'single'
     var svg, histogram, x, y, hist, bins, colors, brush
 
-    const updateBarColor = val => {
+    this.updateBarColor = val => {
       var transition = d3Trans.transition().duration(this.transitionDuration)
 
       d3Trans
@@ -185,13 +186,13 @@ export default {
         },
         onFinish: val => {
           if (!this.updateColorOnChange) {
-            updateBarColor(val)
+            this.updateBarColor(val)
           }
           this.$emit('finish', val)
         },
         onChange: val => {
           if (this.updateColorOnChange) {
-            updateBarColor(val)
+            this.updateBarColor(val)
           }
           this.$emit('change', val)
         }
@@ -199,7 +200,10 @@ export default {
 
       this.ionRangeSlider = this.histSlider.data('ionRangeSlider')
 
-      setTimeout(() => updateBarColor(this.ionRangeSlider.result), this.transitionDuration + 10)
+      setTimeout(
+        () => this.updateBarColor(this.ionRangeSlider.result),
+        this.transitionDuration + 10
+      )
     }
 
     if (this.clip) {

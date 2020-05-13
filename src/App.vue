@@ -17,6 +17,7 @@
 
     <HistogramSlider
       style="margin: 200px auto"
+      ref="hist"
       type="double"
       :width="900"
       :bar-height="110"
@@ -54,10 +55,14 @@ export default {
     }
   },
 
+  mounted() {
+    setTimeout(() => {
+      this.$refs.hist.update({ from: this.data[20] })
+    }, 2000)
+  },
+
   components: {
     HistogramSlider
   }
 }
 </script>
-
-<style></style>
