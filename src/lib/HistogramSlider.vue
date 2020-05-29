@@ -14,6 +14,7 @@
 </template>
 
 <script>
+var $ = require('jquery')
 import './range-slider'
 import props from './props'
 import * as d3Scale from 'd3-scale'
@@ -161,7 +162,7 @@ export default {
         this.ionRangeSlider.destroy()
       }
 
-      this.histSlider = window.$(`#${this.histogramId}`).ionRangeSlider({
+      this.histSlider = $(`#${this.histogramId}`).ionRangeSlider({
         skin: 'round',
         min: min,
         max: max,
