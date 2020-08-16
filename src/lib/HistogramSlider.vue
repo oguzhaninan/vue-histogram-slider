@@ -29,14 +29,10 @@ export default {
   props,
 
   data() {
-    const randomId = Math.random()
-      .toString(36)
-      .substr(2)
-
     return {
-      id: `vue-histogram-${randomId}`,
-      histogramId: `histogram-slider-${randomId}`,
-      clipId: `clip-${randomId}`
+      id: `vue-histogram-${this._uid}`,
+      histogramId: `histogram-slider-${this._uid}`,
+      clipId: `clip-${this._uid}`
     }
   },
 
@@ -83,9 +79,8 @@ export default {
         .attr('fill', d => {
           if (isTypeSingle) {
             return d.x0 < val.from ? colors(d.x0) : this.holderColor
-          } else {
-            return d.x0 <= val.to && d.x0 >= val.from ? colors(d.x0) : this.holderColor
           }
+          return d.x0 <= val.to && d.x0 >= val.from ? colors(d.x0) : this.holderColor
         })
     }
 
