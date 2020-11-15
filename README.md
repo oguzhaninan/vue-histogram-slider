@@ -5,7 +5,7 @@
  Range slider with histogram for <a href="http://vuejs.org/" rel="nofollow" class="rich-diff-level-one">Vue</a>
 </p>
 <p align="center">
-    <img src="https://img.shields.io/npm/l/vue-histogram-slider?style=flat-square" />
+    <img src="https://img.shields.io/github/license/oguzhaninan/vue-histogram-slider?style=flat-square" />
     <img alt="npm" src="https://img.shields.io/npm/dm/vue-histogram-slider?style=flat-square">
     <img alt="GitHub issues" src="https://img.shields.io/github/issues/oguzhaninan/vue-histogram-slider?style=flat-square">
     <img alt="npm" src="https://img.shields.io/npm/v/vue-histogram-slider?style=flat-square">
