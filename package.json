@@ -3,7 +3,7 @@
   "description": "Range slider with histogram for vue.js",
   "version": "0.3.8",
   "main": "dist/histogram-slider.umd.min.js",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/oguzhaninan/vue-histogram-slider.git"
