@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
+    "prepare": "yarn build",
     "build": "vue-cli-service build --name histogram-slider --entry ./src/lib/HistogramSlider.vue --target lib",
     "prepublishOnly": "yarn lint && yarn build",
     "lint": "vue-cli-service lint"
