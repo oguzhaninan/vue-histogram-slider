@@ -172,7 +172,7 @@ export default {
         hide_from_to: this.hideFromTo,
         force_edges: this.forceEdges,
         drag_interval: this.dragInterval,
-        grid_num: this.Number,
+        grid_num: this.gridNum,
         block: this.block,
         keyboard: this.keyboard,
         prettify: this.prettify,
