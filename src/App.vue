@@ -13,6 +13,7 @@
       @finish="finish"
       :force-edges="false"
       :colors="['#4facfe', '#00f2fe']"
+      :grid-num="2"
     />
 
     <HistogramSlider
