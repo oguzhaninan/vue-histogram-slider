@@ -60,6 +60,24 @@ export default {
         this.ionRangeSlider.update({ from, to })
         this.updateBarColor({ from, to })
       }
+    },
+    preventOverlap(e) {
+      const fromHandle = this.$el.querySelector('.irs-handle.from')
+      const toHandle = this.$el.querySelector('.irs-handle.to')
+      const handleSize = this.handleSize
+      const fromHandleLeftPosition = fromHandle.offsetLeft
+      const toHandleLeftPosition = toHandle.offsetLeft
+
+      if (fromHandleLeftPosition + handleSize <= toHandleLeftPosition) {
+        this.lastSliderHandleFromVal = e.from
+        this.lastSliderHandleToVal = e.to
+      } else {
+        this.update({
+          from: this.lastSliderHandleFromVal,
+          to: this.lastSliderHandleToVal
+        })
+        this.$emit('change', e)
+      }
     }
   },
 
@@ -191,6 +209,9 @@ export default {
         onChange: val => {
           if (this.updateColorOnChange) {
             this.updateBarColor(val)
+          }
+          if (this.preventHandlesOverlap) {
+            return this.preventOverlap(val)
           }
           this.$emit('change', val)
         }

@@ -17,6 +17,10 @@ export default {
     type: Boolean,
     default: false
   },
+  preventHandlesOverlap: {
+    type: Boolean,
+    default: false
+  },
   grid: {
     type: Boolean,
     default: true
